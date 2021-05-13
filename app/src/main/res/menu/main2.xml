@@ -6,4 +6,17 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_helps"
+        android:orderInCategory="100"
+        android:title="@string/action_helps"
+        app:showAsAction="never" />
+
+    <item
+        android:icon="@drawable/ic_baseline_chat_24"
+        android:id="@+id/action_chats"
+        android:orderInCategory="100"
+        android:title="@string/action_chats"
+        app:showAsAction="ifRoom" />
 </menu>
