@@ -1,11 +1,14 @@
-package com.example.eathit;
+package com.example.eathit.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.widget.Toast;
 
+import com.example.eathit.R;
+import com.example.eathit.databinding.ActivityMain2Binding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -17,7 +20,6 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.eathit.databinding.ActivityMain2Binding;
 
 public class Main2Activity extends AppCompatActivity {
 
@@ -74,7 +76,9 @@ public class Main2Activity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_chats:
-                Toast.makeText(getApplicationContext(), "Chats", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "Chats", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, ChatActivity.class);
+                startActivity(intent);
                 break;
             case R.id.action_settings:
                 Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
