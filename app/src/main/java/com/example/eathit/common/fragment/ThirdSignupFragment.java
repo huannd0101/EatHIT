@@ -8,18 +8,26 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.eathit.common.loginSignup.SignupActivity;
 import com.example.eathit.databinding.FragmentThirthSignupBinding;
+import com.example.eathit.utilities.Constants;
+
+import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class ThirdSignupFragment extends Fragment {
     public static final String TAG = FirstSignupFragment.class.getName();
     FragmentThirthSignupBinding binding;
+    private ArrayList<String> strings;
+    private SignupActivity signupActivity;
 
 
-
-    public static ThirdSignupFragment newInstance() {
+    public static ThirdSignupFragment newInstance(ArrayList<String> strings) {
         ThirdSignupFragment fragment = new ThirdSignupFragment();
         Bundle args = new Bundle();
+
+        args.putStringArrayList(Constants.stringDataFromSecondFragment, strings);
 
         fragment.setArguments(args);
         return fragment;
@@ -38,6 +46,9 @@ public class ThirdSignupFragment extends Fragment {
         //animation
         initAnimate();
 
+        //
+        signupActivity = (SignupActivity) getActivity();
+
         //back to second signup fragment
         binding.btnBackSecondSignup.setOnClickListener(v -> {
             if(getFragmentManager() != null){
@@ -45,8 +56,47 @@ public class ThirdSignupFragment extends Fragment {
             }
         });
 
+        //data from two fragment
+        if(getArguments() != null) {
+            strings = getArguments().getStringArrayList(Constants.stringDataFromSecondFragment);
+        }
+
+        //btn signup
+        binding.btnSignUp.setOnClickListener(v -> {
+            clickToSignUp();
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         return binding.getRoot();
     }
+
+    private void clickToSignUp() {
+        String phoneNumber = Objects.requireNonNull(binding.edtPhoneNumber.getText()).toString().trim();
+        if(phoneNumber.isEmpty()){
+            binding.tilPhoneNumber.setError("You have not entered phone number");
+            return;
+        }else {
+            strings.add(phoneNumber);
+            binding.tilPhoneNumber.setError(null);
+        }
+
+        signupActivity.setStrings(strings);
+    }
+
+
     private void initAnimate() {
         binding.cpp.setTranslationY(800);
         binding.tilPhoneNumber.setTranslationY(800);

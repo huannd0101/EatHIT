@@ -2,6 +2,7 @@ package com.example.eathit.common.loginSignup;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,6 +28,11 @@ public class LoginActivity extends AppCompatActivity {
         binding.tvToSignUp.setOnClickListener(v -> {
             Intent intent = new Intent(this, SignupActivity.class);
             startActivity(intent);
+        });
+
+        //btn-forgot password
+        binding.tvForgotPassword.setOnClickListener(v -> {
+            Toast.makeText(this, "Chức năng chưa phát triển :v", Toast.LENGTH_SHORT).show();
         });
 
         //xu lý btn login

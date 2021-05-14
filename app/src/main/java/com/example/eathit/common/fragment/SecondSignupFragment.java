@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -12,17 +13,24 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.eathit.R;
 import com.example.eathit.databinding.FragmentSecondSignupBinding;
+import com.example.eathit.utilities.Constants;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+
 public class SecondSignupFragment extends Fragment {
     FragmentSecondSignupBinding binding;
-    String gender;
+    private String gender = "";
     public static final String TAG = SecondSignupFragment.class.getName();
+    private ArrayList<String> arrayList;
 
-    public static SecondSignupFragment newInstance() {
+    public static SecondSignupFragment newInstance(ArrayList<String> strings) {
         SecondSignupFragment fragment = new SecondSignupFragment();
         Bundle args = new Bundle();
+
+        args.putStringArrayList(Constants.stringDataFromFirstFragment, strings);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -48,37 +56,58 @@ public class SecondSignupFragment extends Fragment {
             }
         });
 
-        binding.radioGender.setOnCheckedChangeListener((group, checkedId) -> {
-            if (checkedId == binding.radioMale.getId()){
-                gender = binding.radioMale.getText().toString().toLowerCase();
-            }else if(checkedId == binding.radioFemale.getId()){
-                gender = binding.radioFemale.getText().toString().toLowerCase();
-            }else {
-                gender = binding.radioOther.getText().toString().toLowerCase();
-            }
-        });
+        //data from first fragment
+        if(getArguments() != null){
+            arrayList = getArguments().getStringArrayList(Constants.stringDataFromFirstFragment);
+        }
+
+
+
+
+
 
         //next to third signup fragment
         binding.btnNextToThirdSignUp.setOnClickListener(v -> {
             //get data from edt
+            sendDataToThirdFragment();
 
-            String day = String.valueOf(binding.dpBirthday.getDayOfMonth());
-            String month = String.valueOf(binding.dpBirthday.getMonth() + 1);
-            String year = String.valueOf(binding.dpBirthday.getYear());
-            String birthDay = day + "/" + month + "/" + year;
-
-
-            Fragment fragment = ThirdSignupFragment.newInstance();
-
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.layout_fragment, fragment).addToBackStack(ThirdSignupFragment.TAG).commit();
         });
-
 
 
 
         return binding.getRoot();
     }
+
+    private void sendDataToThirdFragment() {
+        binding.radioGender.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == binding.radioMale.getId()){
+                gender = binding.radioMale.getText().toString().toLowerCase();
+            }else if(checkedId == binding.radioFemale.getId()){
+                gender = binding.radioFemale.getText().toString().toLowerCase();
+            }else if(checkedId == binding.radioOther.getId()){
+                gender = binding.radioOther.getText().toString().toLowerCase();
+            }
+        });
+
+        String day = String.valueOf(binding.dpBirthday.getDayOfMonth());
+        String month = String.valueOf(binding.dpBirthday.getMonth() + 1);
+        String year = String.valueOf(binding.dpBirthday.getYear());
+        String birthDay = day + "/" + month + "/" + year;
+
+        if(gender.isEmpty()){
+            Toast.makeText(getContext(), "You have not choose gender", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        arrayList.add(gender);
+        arrayList.add(birthDay);
+
+        Fragment fragment = ThirdSignupFragment.newInstance(arrayList);
+
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.layout_fragment, fragment).addToBackStack(ThirdSignupFragment.TAG).commit();
+    }
+
 
     private void initAnimate() {
         binding.radioGender.setTranslationY(800);
