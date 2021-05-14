@@ -1,5 +1,6 @@
 package com.example.eathit.common.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,10 +13,13 @@ import androidx.fragment.app.FragmentManager;
 
 
 import com.example.eathit.R;
+import com.example.eathit.common.events.FirstFragmentSignupListener;
 import com.example.eathit.common.loginSignup.LoginActivity;
 import com.example.eathit.common.loginSignup.SignupActivity;
 import com.example.eathit.databinding.FragmentFirstSignupBinding;
 import com.example.eathit.utilities.Constants;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +30,9 @@ public class FirstSignupFragment extends Fragment {
 
     public static final String TAG = FirstSignupFragment.class.getName();
     FragmentFirstSignupBinding binding;
-    SignupActivity mActivity;
+
+
+
 
     public static FirstSignupFragment newInstance() {
         FirstSignupFragment fragment = new FirstSignupFragment();
@@ -49,8 +55,6 @@ public class FirstSignupFragment extends Fragment {
 
         binding = FragmentFirstSignupBinding.inflate(inflater, container, false);
 
-        mActivity = (SignupActivity) getActivity();
-
         //animation
         initAnimate();
         //chuyển về login
@@ -61,47 +65,60 @@ public class FirstSignupFragment extends Fragment {
 
         //chuyển sang second signup
         binding.btnNextToSecondSignUp.setOnClickListener(v -> {
-
-            String fullName = Objects.requireNonNull(binding.edtFullName.getText()).toString().trim();
-            String userName = Objects.requireNonNull(binding.edtUsername.getText()).toString().trim();
-            String email = Objects.requireNonNull(binding.edtEmail.getText()).toString().trim();
-            String password = Objects.requireNonNull(binding.edtPassword.getText()).toString().trim();
-            String passwordAgain = Objects.requireNonNull(binding.edtPasswordAgain.getText()).toString().trim();
-
-            //send data to activity
-            ArrayList<String> dataSignUp = new ArrayList<>();
-            dataSignUp.add(fullName);
-            dataSignUp.add(userName);
-            dataSignUp.add(email);
-            dataSignUp.add(password);
-            dataSignUp.add(passwordAgain);
-
-
-            Fragment fragment = SecondSignupFragment.newInstance();
-
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.layout_fragment, fragment).addToBackStack(SecondSignupFragment.TAG).commit();
+            moveToSecondFragment();
         });
 
 
         return binding.getRoot();
     }
 
+    private void moveToSecondFragment() {
+        String fullName = Objects.requireNonNull(binding.edtFullName.getText()).toString().trim();
+        String userName = Objects.requireNonNull(binding.edtUsername.getText()).toString().trim();
+        String email = Objects.requireNonNull(binding.edtEmail.getText()).toString().trim();
+        String password = Objects.requireNonNull(binding.edtPassword.getText()).toString().trim();
+        String passwordAgain = Objects.requireNonNull(binding.edtPasswordAgain.getText()).toString().trim();
+
+        if(fullName.isEmpty()){
+            binding.tilFullName.setError("You have not entered fullName");
+            return;
+        }else if(userName.isEmpty()){
+            binding.tilFullName.setError(null);
+            binding.tilUsername.setError("You have not entered username");
+            return;
+        }else if(email.isEmpty()){
+            binding.tilUsername.setError(null);
+            binding.tilEmail.setError("You have not entered email");
+            return;
+        }else if(password.isEmpty()){
+            binding.tilEmail.setError(null);
+            binding.tilPassword.setError("You have not entered password");
+            return;
+        }else if(passwordAgain.isEmpty()){
+            binding.tilPassword.setError(null);
+            binding.tilPasswordAgain.setError("You have not entered password again");
+            return;
+        }else if(!password.equals(passwordAgain)){
+            binding.tilPasswordAgain.setError("Password is not correct");
+            return;
+        }else {
+            binding.tilPasswordAgain.setError(null);
+        }
+
+        //send data to activity
+        ArrayList<String> dataSignUp = new ArrayList<>();
+        dataSignUp.add(fullName);
+        dataSignUp.add(userName);
+        dataSignUp.add(email);
+        dataSignUp.add(password);
+        dataSignUp.add(passwordAgain);
 
 
+        Fragment fragment = SecondSignupFragment.newInstance(dataSignUp);
 
-
-
-
-
-
-
-
-
-
-
-
-
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.layout_fragment, fragment).addToBackStack(SecondSignupFragment.TAG).commit();
+    }
 
 
 

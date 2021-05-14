@@ -84,6 +84,7 @@ tools:context=".common.fragment.ThirdSignupFragment">
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="phone"
+                android:id="@+id/edtPhoneNumber"
                 android:textColor="@color/white" />
         </com.google.android.material.textfield.TextInputLayout>
 
