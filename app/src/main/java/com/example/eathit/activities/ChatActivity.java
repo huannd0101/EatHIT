@@ -19,7 +19,8 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         Objects.requireNonNull(getSupportActionBar()).hide();
 
-        //set up tablayout
+        //set up tablayout1
+        
         binding.viewPager.setAdapter(new FragmentChatAdapter(getSupportFragmentManager()));
         binding.tabLayout.setupWithViewPager(binding.viewPager);
 
