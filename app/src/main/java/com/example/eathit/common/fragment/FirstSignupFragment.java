@@ -13,8 +13,12 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.eathit.R;
 import com.example.eathit.common.loginSignup.LoginActivity;
+import com.example.eathit.common.loginSignup.SignupActivity;
 import com.example.eathit.databinding.FragmentFirstSignupBinding;
+import com.example.eathit.utilities.Constants;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -22,10 +26,13 @@ public class FirstSignupFragment extends Fragment {
 
     public static final String TAG = FirstSignupFragment.class.getName();
     FragmentFirstSignupBinding binding;
+    SignupActivity mActivity;
 
     public static FirstSignupFragment newInstance() {
         FirstSignupFragment fragment = new FirstSignupFragment();
         Bundle args = new Bundle();
+
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -42,6 +49,8 @@ public class FirstSignupFragment extends Fragment {
 
         binding = FragmentFirstSignupBinding.inflate(inflater, container, false);
 
+        mActivity = (SignupActivity) getActivity();
+
         //animation
         initAnimate();
         //chuyển về login
@@ -52,14 +61,69 @@ public class FirstSignupFragment extends Fragment {
 
         //chuyển sang second signup
         binding.btnNextToSecondSignUp.setOnClickListener(v -> {
+
+            String fullName = Objects.requireNonNull(binding.edtFullName.getText()).toString().trim();
+            String userName = Objects.requireNonNull(binding.edtUsername.getText()).toString().trim();
+            String email = Objects.requireNonNull(binding.edtEmail.getText()).toString().trim();
+            String password = Objects.requireNonNull(binding.edtPassword.getText()).toString().trim();
+            String passwordAgain = Objects.requireNonNull(binding.edtPasswordAgain.getText()).toString().trim();
+
+            //send data to activity
+            ArrayList<String> dataSignUp = new ArrayList<>();
+            dataSignUp.add(fullName);
+            dataSignUp.add(userName);
+            dataSignUp.add(email);
+            dataSignUp.add(password);
+            dataSignUp.add(passwordAgain);
+
+
             Fragment fragment = SecondSignupFragment.newInstance();
-            FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.layout_fragment, fragment).addToBackStack(SecondSignupFragment.TAG).commit();
         });
 
 
         return binding.getRoot();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private void initAnimate() {
         binding.tilFullName.setTranslationY(800);

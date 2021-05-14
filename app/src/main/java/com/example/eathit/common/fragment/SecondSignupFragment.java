@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -12,11 +13,11 @@ import androidx.fragment.app.FragmentManager;
 import com.example.eathit.R;
 import com.example.eathit.databinding.FragmentSecondSignupBinding;
 
-import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
 public class SecondSignupFragment extends Fragment {
     FragmentSecondSignupBinding binding;
-
+    String gender;
     public static final String TAG = SecondSignupFragment.class.getName();
 
     public static SecondSignupFragment newInstance() {
@@ -33,27 +34,46 @@ public class SecondSignupFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentSecondSignupBinding.inflate(getLayoutInflater(), container, false);
+        binding = FragmentSecondSignupBinding.inflate(inflater, container, false);
 
         //animation
         initAnimate();
 
         //back to first signup fragment
         binding.btnBackFirstSignup.setOnClickListener(v -> {
-            if(getFragmentManager() != null) {
+            if (getFragmentManager() != null) {
                 getFragmentManager().popBackStack();
+            }
+        });
+
+        binding.radioGender.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == binding.radioMale.getId()){
+                gender = binding.radioMale.getText().toString().toLowerCase();
+            }else if(checkedId == binding.radioFemale.getId()){
+                gender = binding.radioFemale.getText().toString().toLowerCase();
+            }else {
+                gender = binding.radioOther.getText().toString().toLowerCase();
             }
         });
 
         //next to third signup fragment
         binding.btnNextToThirdSignUp.setOnClickListener(v -> {
+            //get data from edt
+
+            String day = String.valueOf(binding.dpBirthday.getDayOfMonth());
+            String month = String.valueOf(binding.dpBirthday.getMonth() + 1);
+            String year = String.valueOf(binding.dpBirthday.getYear());
+            String birthDay = day + "/" + month + "/" + year;
+
+
             Fragment fragment = ThirdSignupFragment.newInstance();
 
-            FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.layout_fragment, fragment).addToBackStack(ThirdSignupFragment.TAG).commit();
         });
+
 
 
 

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/profile_image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="5dp"
+        android:padding="5dp"
+        app:civ_border_width="2dp"
+        app:civ_border_color="#FF000000"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        app:civ_border_width="10dp"
+        app:civ_border_color="#05df25"
+        android:id="@+id/img_online"
+        android:src="@mipmap/ic_launcher"
+        android:layout_toRightOf="@+id/profile_image"
+        android:layout_below="@+id/profile_image"
+        android:layout_marginTop="-20dp"
+        android:layout_marginLeft="-25dp"
+        />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        app:civ_border_width="10dp"
+        app:civ_border_color="#bfbfbf"
+        android:id="@+id/img_offline"
+        android:src="@mipmap/ic_launcher"
+        android:layout_toRightOf="@+id/profile_image"
+        android:layout_below="@+id/profile_image"
+        android:layout_marginTop="-20dp"
+        android:layout_marginLeft="-25dp"
+        />
+
+    <LinearLayout
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/profile_image"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvUserName"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="Name"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvLastMessage"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:text=""
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>

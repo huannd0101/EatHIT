@@ -6,13 +6,14 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-import com.example.eathit.Main2Activity;
+import com.example.eathit.activities.Main2Activity;
 import com.example.eathit.databinding.ActivityLoginBinding;
 
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
     ActivityLoginBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +31,33 @@ public class LoginActivity extends AppCompatActivity {
 
         //xu lý btn login
         binding.btnLogin.setOnClickListener(v -> {
+            String username = Objects.requireNonNull(binding.edtUsername.getText()).toString();
+            String password = Objects.requireNonNull(binding.edtPassword.getText()).toString();
+            if (username.isEmpty() && password.isEmpty()) {
+                binding.tilUsername.setError("You have not entered username");
+                binding.tilPassword.setError("You have not entered password");
+                return;
+            } else {
+                binding.tilUsername.setError(null);
+                binding.tilPassword.setError(null);
+            }
+
+            if (username.isEmpty()) {
+                binding.tilUsername.setError("You have not entered username");
+                binding.tilPassword.setError(null);
+                return;
+            } else {
+                binding.tilUsername.setError(null);
+            }
+
+            if (password.isEmpty()) {
+                binding.tilPassword.setError("You have not entered password");
+                return;
+            } else {
+                binding.tilUsername.setError(null);
+            }
+
+
             Intent intent = new Intent(this, Main2Activity.class);
             startActivity(intent);
         });
