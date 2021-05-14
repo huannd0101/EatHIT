@@ -17,6 +17,7 @@ import com.example.eathit.databinding.FragmentGalleryBinding;
 
 public class GalleryFragment extends Fragment {
 
+    String daume="kepadfja";
     private GalleryViewModel galleryViewModel;
     private FragmentGalleryBinding binding;
 
@@ -36,11 +37,13 @@ public class GalleryFragment extends Fragment {
             }
         });
         return root;
+
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+
     }
 }
