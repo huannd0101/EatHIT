@@ -36,6 +36,9 @@ public class GalleryFragment extends Fragment {
                 textView.setText(s);
             }
         });
+        String abc ="Anh phongf depj trai";
+        String oke ="Em eei";
+
         return root;
 
     }
