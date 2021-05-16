@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class ChatsFragment extends Fragment {
-    FragmentChatsBinding binding;
+    private FragmentChatsBinding binding;
     Socket mSocket;
     List<User> users;
     UsersAdapter adapter;
