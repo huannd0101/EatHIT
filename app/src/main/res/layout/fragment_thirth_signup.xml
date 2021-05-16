@@ -56,15 +56,15 @@ tools:context=".common.fragment.ThirdSignupFragment">
         android:layout_marginTop="40dp"
         android:orientation="vertical">
 
-        <com.hbb20.CountryCodePicker
-            android:padding="5dp"
-            android:id="@+id/cpp"
-            app:ccp_showPhoneCode="true"
-            app:ccp_showNameCode="true"
-            app:ccp_showFullName="true"
-            app:ccpDialog_showFlag="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+<!--        <com.hbb20.CountryCodePicker-->
+<!--            android:padding="5dp"-->
+<!--            android:id="@+id/cpp"-->
+<!--            app:ccp_showPhoneCode="true"-->
+<!--            app:ccp_showNameCode="true"-->
+<!--            app:ccp_showFullName="true"-->
+<!--            app:ccpDialog_showFlag="true"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"/>-->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilPhoneNumber"

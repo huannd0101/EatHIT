@@ -19,4 +19,9 @@
         android:orderInCategory="100"
         android:title="@string/action_chats"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:title="@string/logout"
+        android:id="@+id/action_logout"
+        android:orderInCategory="100" />
 </menu>

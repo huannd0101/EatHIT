@@ -8,9 +8,13 @@ import android.view.Menu;
 import android.widget.Toast;
 
 import com.example.eathit.R;
+import com.example.eathit.common.loginSignup.LoginActivity;
 import com.example.eathit.databinding.ActivityMain2Binding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
@@ -25,13 +29,17 @@ public class Main2Activity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMain2Binding binding;
-
+    FirebaseDatabase database;
+    FirebaseAuth auth;
+    FirebaseUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         binding = ActivityMain2Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        database = FirebaseDatabase.getInstance();
+        auth = FirebaseAuth.getInstance();
 
         setSupportActionBar(binding.appBarMain2.toolbar);
 
@@ -86,7 +94,11 @@ public class Main2Activity extends AppCompatActivity {
             case R.id.action_helps:
                 Toast.makeText(getApplicationContext(), "hiếp", Toast.LENGTH_SHORT).show();
                 break;
-
+            case R.id.action_logout:
+                auth.signOut();
+                Intent intent1 = new Intent(Main2Activity.this, LoginActivity.class);
+                startActivity(intent1);
+                finish();
         }
         return super.onOptionsItemSelected(item);
     }
