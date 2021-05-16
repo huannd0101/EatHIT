@@ -22,6 +22,10 @@ public class ThirdSignupFragment extends Fragment {
     private ArrayList<String> strings;
     private SignupActivity signupActivity;
 
+//    private FirebaseAuth mAuth;
+//    FirebaseDatabase database;
+//    ProgressDialog progressDialog;
+
 
     public static ThirdSignupFragment newInstance(ArrayList<String> strings) {
         ThirdSignupFragment fragment = new ThirdSignupFragment();
@@ -45,6 +49,15 @@ public class ThirdSignupFragment extends Fragment {
         binding = FragmentThirthSignupBinding.inflate(inflater, container, false);
         //animation
         initAnimate();
+
+        //firebase
+//        mAuth = FirebaseAuth.getInstance();
+//        database = FirebaseDatabase.getInstance();
+//
+//        //progressDialog
+//        progressDialog = new ProgressDialog(getContext());
+//        progressDialog.setTitle("Creating account");
+//        progressDialog.setMessage("We are creating your account");
 
         //
         signupActivity = (SignupActivity) getActivity();
@@ -93,22 +106,49 @@ public class ThirdSignupFragment extends Fragment {
             binding.tilPhoneNumber.setError(null);
         }
 
+
+//        progressDialog.show();
+//        mAuth.createUserWithEmailAndPassword
+//                (binding.tiedtEmail.getText().toString(), binding.tiedtPass.getText().toString())
+//                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        //tắt dialog sau khi tạo thành công hoặc thất bại
+//                        progressDialog.dismiss();
+//                        ///
+//                        if(task.isSuccessful()){
+//
+//                            Users user = new Users(binding.tiedtUser.getText().toString(), binding.tiedtEmail.getText().toString(), binding.tiedtPass.getText().toString());
+//                            String id = task.getResult().getUser().getUid();
+//                            user.setUseeId(id);
+//                            database.getReference().child("Users").child(id).setValue(user);
+//
+//
+//                            Toast.makeText(SignUpActivity.this, "User created successfully", Toast.LENGTH_SHORT).show();
+//                        }else {
+//                            Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
+
+
+
         signupActivity.setStrings(strings);
     }
 
 
     private void initAnimate() {
-        binding.cpp.setTranslationY(800);
+//        binding.cpp.setTranslationY(800);
         binding.tilPhoneNumber.setTranslationY(800);
         binding.btnSignUp.setTranslationY(800);
         binding.btnLogin.setTranslationY(800);
 
-        binding.cpp.setAlpha(0);
+//        binding.cpp.setAlpha(0);
         binding.tilPhoneNumber.setAlpha(0);
         binding.btnSignUp.setAlpha(0);
         binding.btnLogin.setAlpha(0);
 
-        binding.cpp.animate().translationY(0).alpha(1).setDuration(1800).setStartDelay(600).start();
+//        binding.cpp.animate().translationY(0).alpha(1).setDuration(1800).setStartDelay(600).start();
         binding.tilPhoneNumber.animate().translationY(0).alpha(1).setDuration(1800).setStartDelay(800).start();
         binding.btnSignUp.animate().translationY(0).alpha(1).setDuration(1800).setStartDelay(1100).start();
         binding.btnLogin.animate().translationY(0).alpha(1).setDuration(1800).setStartDelay(1300).start();

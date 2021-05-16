@@ -4,6 +4,7 @@
     package="com.example.eathit">
 
     <application
+        android:name=".application.ChatApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -12,11 +13,12 @@
         android:theme="@style/Theme.EatHIT"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".activities.ChatActivity"></activity>
+        <activity android:name=".activities.ChatsDetailActivity"></activity>
+        <activity android:name=".activities.ChatActivity" />
         <activity
             android:name=".activities.Main2Activity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.EatHIT.NoActionBar"></activity>
+            android:theme="@style/Theme.EatHIT.NoActionBar" />
         <activity android:name=".common.loginSignup.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

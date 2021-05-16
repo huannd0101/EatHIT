@@ -1,19 +1,42 @@
 package com.example.eathit.common.loginSignup;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import com.example.eathit.R;
 import com.example.eathit.activities.Main2Activity;
 import com.example.eathit.databinding.ActivityLoginBinding;
+import com.example.eathit.modules.User;
+import com.example.eathit.utilities.Constants;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
     ActivityLoginBinding binding;
+    ProgressDialog progressDialog;
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+    //sign up with google
+    GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +46,19 @@ public class LoginActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         //animation
         initAnimate();
+        //
+        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setTitle("Login");
+        progressDialog.setMessage("Login to your account");
+
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
 
         //btn-signup
         binding.tvToSignUp.setOnClickListener(v -> {
@@ -63,11 +99,94 @@ public class LoginActivity extends AppCompatActivity {
                 binding.tilUsername.setError(null);
             }
 
+            //bật dialog
+            progressDialog.show();
 
-            Intent intent = new Intent(this, Main2Activity.class);
-            startActivity(intent);
+            auth.signInWithEmailAndPassword(username, password)
+                    .addOnCompleteListener(task -> {
+                        //tắt dialog
+                        progressDialog.dismiss();
+
+                        if (task.isSuccessful()) {
+                            Intent intent = new Intent(LoginActivity.this, Main2Activity.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(LoginActivity.this, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
 
+        //ktra nếu đã đăng nhập rồi thì chuyển đến main activity
+        if (auth.getCurrentUser() != null) {
+            Intent intent = new Intent(LoginActivity.this, Main2Activity.class);
+            startActivity(intent);
+        }
+
+        //xử lý button click sign in with google
+        binding.btnSignUpWithGoogle.setOnClickListener(v -> signInWithGoogle());
+
+    }
+
+    //log in with google
+    private void signInWithGoogle() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, Constants.RC_SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == Constants.RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                assert account != null;
+                Log.d("TAG", "firebaseAuthWithGoogle:" + account.getId());
+                firebaseAuthWithGoogle(account.getIdToken());
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Log.w("TAG", "Google sign in failed", e);
+            }
+        }
+    }
+
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        auth.signInWithCredential(credential)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d("TAG", "signInWithCredential:success");
+                        FirebaseUser user = auth.getCurrentUser();
+
+                        //lưu vào database
+                        User users = new User();
+                        if(user != null){
+                            users.setUserId(user.getUid());
+                            users.setFullName(user.getDisplayName());
+                            users.setProfilePic(Objects.requireNonNull(user.getPhotoUrl()).toString());
+                            database.getReference().child("Users").child(user.getUid()).setValue(users);
+                        }
+                        //kết thúc lưu vào database
+
+                        Intent intent = new Intent(LoginActivity.this, Main2Activity.class);
+                        startActivity(intent);
+
+                        Toast.makeText(LoginActivity.this, "Sign in with Google", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w("TAG", "signInWithCredential:failure", task.getException());
+
+                        Toast.makeText(LoginActivity.this, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+
+                        Snackbar.make(binding.getRoot(), "Authentication failed.", Snackbar.LENGTH_LONG).show();
+
+                    }
+                });
     }
 
     private void initAnimate() {

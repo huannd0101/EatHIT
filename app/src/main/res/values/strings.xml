@@ -36,4 +36,5 @@
     <string name="don_t_have_account">Don\'t have account?</string>
     <string name="action_helps">Helps</string>
     <string name="action_chats">Chat</string>
+    <string name="logout">logout</string>
 </resources>
