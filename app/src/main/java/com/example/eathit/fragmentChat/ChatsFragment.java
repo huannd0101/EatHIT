@@ -1,6 +1,5 @@
 package com.example.eathit.fragmentChat;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,13 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.eathit.R;
-import com.example.eathit.activities.ChatsDetailActivity;
 import com.example.eathit.adapter.UsersAdapter;
-import com.example.eathit.application.ChatApplication;
+import com.example.eathit.application.SocketApplication;
 import com.example.eathit.databinding.FragmentChatsBinding;
 import com.example.eathit.modules.User;
-import com.example.eathit.utilities.Constants;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -27,7 +23,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class ChatsFragment extends Fragment {
     private FragmentChatsBinding binding;
@@ -55,8 +50,8 @@ public class ChatsFragment extends Fragment {
         binding = FragmentChatsBinding.inflate(inflater, container, false);
         // Inflate the layout for this fragment
 
-        ChatApplication chatApplication = (ChatApplication) requireActivity().getApplication();
-        mSocket = chatApplication.getSocket();
+        SocketApplication socketApplication = (SocketApplication) requireActivity().getApplication();
+        mSocket = socketApplication.getSocket();
 
 
         database = FirebaseDatabase.getInstance();
@@ -66,7 +61,7 @@ public class ChatsFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         binding.chatRclView.setLayoutManager(linearLayoutManager);
 
-        adapter = new UsersAdapter(users, getContext(), mSocket);
+        adapter = new UsersAdapter(users, getContext(), mSocket, true);
         binding.chatRclView.setAdapter(adapter);
 
 

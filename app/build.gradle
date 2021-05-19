@@ -72,6 +72,8 @@ dependencies {
 
     //load image from internet
     implementation 'com.squareup.picasso:picasso:2.71828'
+    //quét mã QR
+    implementation 'com.journeyapps:zxing-android-embedded:3.5.0'
 
 
 }

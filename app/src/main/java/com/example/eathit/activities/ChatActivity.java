@@ -1,28 +1,22 @@
 package com.example.eathit.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.example.eathit.R;
 import com.example.eathit.adapter.FragmentChatAdapter;
-import com.example.eathit.adapter.UsersAdapter;
 import com.example.eathit.databinding.ActivityChatBinding;
-import com.example.eathit.modules.User;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class ChatActivity extends AppCompatActivity {
     ActivityChatBinding binding;
-
+    FirebaseUser user;
+    FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +25,8 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         Objects.requireNonNull(getSupportActionBar()).hide();
 
+        database = FirebaseDatabase.getInstance();
+
         //set up tablayout1
         
         binding.viewPager.setAdapter(new FragmentChatAdapter(getSupportFragmentManager()));
@@ -38,5 +34,36 @@ public class ChatActivity extends AppCompatActivity {
 
 
     }
+    private void isOnline(String isOnline){
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("isOnline", isOnline);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(user != null)
+            database.getReference().child("Users")
+                    .child(user.getUid())
+                    .updateChildren(hashMap);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isOnline("online");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+//        isOnline("offline");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        isOnline("offline");
+    }
+
 
 }
