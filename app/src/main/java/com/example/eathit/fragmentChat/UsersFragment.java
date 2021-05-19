@@ -10,10 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.eathit.R;
 import com.example.eathit.activities.ChatActivity;
 import com.example.eathit.adapter.UsersAdapter;
-import com.example.eathit.application.ChatApplication;
+import com.example.eathit.application.SocketApplication;
 import com.example.eathit.databinding.FragmentUsersBinding;
 import com.example.eathit.modules.User;
 import com.github.nkzawa.socketio.client.Socket;
@@ -54,8 +53,8 @@ public class UsersFragment extends Fragment {
         binding = FragmentUsersBinding.inflate(inflater, container, false);
 
         ChatActivity chatActivity = (ChatActivity) getActivity();
-        ChatApplication chatApplication = (ChatApplication) requireActivity().getApplication();
-        mSocket = chatApplication.getSocket();
+        SocketApplication socketApplication = (SocketApplication) requireActivity().getApplication();
+        mSocket = socketApplication.getSocket();
         database = FirebaseDatabase.getInstance();
 
         users = new ArrayList<>();
@@ -64,7 +63,7 @@ public class UsersFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         binding.rclAllUsers.setLayoutManager(linearLayoutManager);
 
-        adapter = new UsersAdapter(users, getContext(), mSocket);
+        adapter = new UsersAdapter(users, getContext(), mSocket, true);
         binding.rclAllUsers.setAdapter(adapter);
 
 

@@ -6,7 +6,7 @@ import com.example.eathit.utilities.Constants;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
 
-public class ChatApplication extends Application {
+public class SocketApplication extends Application {
     private Socket mSocket;
     {
         try {

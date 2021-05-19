@@ -16,10 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eathit.R;
 import com.example.eathit.activities.ChatsDetailActivity;
-import com.example.eathit.application.ChatApplication;
 import com.example.eathit.modules.Chat;
 import com.example.eathit.modules.User;
 import com.example.eathit.utilities.Constants;
+import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,28 +30,34 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
-
+    boolean isOnline;
+    String userId;
     List<User> list;
     Context context;
     Socket mSocket;
     String theLastMessage = "";
     FirebaseAuth auth;
-    public UsersAdapter(List<User> list, Context context, Socket mSocket) {
+    public UsersAdapter(List<User> list, Context context, Socket mSocket, boolean isOnline) {
         this.list = list;
         this.context = context;
         this.mSocket = mSocket;
+        this.isOnline = isOnline;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.user_layout, parent, false);
+
         return new ViewHolder(view);
     }
 
@@ -60,23 +66,28 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
         User users = list.get(position);
         Picasso.get().load(users.getProfilePic()).placeholder(R.drawable.ic_baseline_person_24).into(holder.image);
         holder.username.setText(users.getFullName());
+
+        String uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+
+
+
 //        holder.lastMessage.setText(users.getLastMessage());
 
         //sét online
-//        if(isOnline){
-//            if(users != null && users.getIsOnline() != null){
-//                if(users.getIsOnline().compareToIgnoreCase("online") == 0){
-//                    holder.imgOnline.setVisibility(View.VISIBLE);
-//                    holder.imgOffline.setVisibility(View.GONE);
-//                }else {
-//                    holder.imgOnline.setVisibility(View.GONE);
-//                    holder.imgOffline.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        }else {
-//            holder.imgOnline.setVisibility(View.GONE);
-//            holder.imgOffline.setVisibility(View.GONE);
-//        }
+        if(isOnline){
+            if(users.getIsOnline() != null){
+                if(users.getIsOnline().compareToIgnoreCase("online") == 0){
+                    holder.imgOnline.setVisibility(View.VISIBLE);
+                    holder.imgOffline.setVisibility(View.GONE);
+                }else {
+                    holder.imgOnline.setVisibility(View.GONE);
+                    holder.imgOffline.setVisibility(View.VISIBLE);
+                }
+            }
+        }else {
+            holder.imgOnline.setVisibility(View.GONE);
+            holder.imgOffline.setVisibility(View.GONE);
+        }
 
         //Show last message on user's list
 //        if(isOnline) {
@@ -94,6 +105,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
                 intent.putExtra("userId", users.getUserId());
                 intent.putExtra("profilePic", users.getProfilePic());
                 intent.putExtra("userName", users.getFullName());
+                intent.putExtra("isOnline", users.getIsOnline());
                 String room = currentUserId+"|"+users.getUserId();
                 intent.putExtra("room", "huan");
 
@@ -163,4 +175,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
         });
 
     }
+
+
 }

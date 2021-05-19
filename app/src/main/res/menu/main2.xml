@@ -14,6 +14,12 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_QRCode"
+        android:orderInCategory="100"
+        android:title="@string/qr_code"
+        app:showAsAction="never" />
+
+    <item
         android:icon="@drawable/ic_baseline_chat_24"
         android:id="@+id/action_chats"
         android:orderInCategory="100"

@@ -9,7 +9,7 @@ public class User {
 //    private String birthDay;
 //    private String phoneNumber;
     private String profilePic;
-//    private String isOnline;
+    private String isOnline;
 
 //    public User(String userId, String fullName, String userName, String email, String gender, String birthDay, String phoneNumber, String profilePic, String isOnline) {
 //        this.userId = userId;
@@ -24,10 +24,11 @@ public class User {
 //    }
 
 
-    public User(String userId, String fullName, String profilePic) {
+    public User(String userId, String fullName, String profilePic, String isOnline) {
         this.userId = userId;
         this.fullName = fullName;
         this.profilePic = profilePic;
+        this.isOnline = isOnline;
     }
 
     public User() {
@@ -57,5 +58,11 @@ public class User {
         this.profilePic = profilePic;
     }
 
+    public String getIsOnline() {
+        return isOnline;
+    }
 
+    public void setIsOnline(String isOnline) {
+        this.isOnline = isOnline;
+    }
 }

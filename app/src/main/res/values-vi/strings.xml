@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EatHIT</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="action_chats">Nhắn tin</string>
+    <string name="action_helps">Hỗ trợ</string>
+    <string name="don_t_have_account">Bạn chưa có tài khoản?</string>
+    <string name="forgot_password">Quên mật khẩu?</string>
+    <string name="login">Đăng nhập</string>
+    <string name="btn_signup">Đăng ký</string>
+    <string name="select_your_birthday">Ngày sinh</string>
+    <string name="Other">Khác</string>
+    <string name="Female">Nữ</string>
+    <string name="Male">Nam</string>
+    <string name="btn_login">Đăng nhập</string>
+    <string name="btn_next">Chuyển</string>
+    <string name="enter_password_again">Nhập lại password</string>
+    <string name="enter_phone_number">Số điện thoại</string>
+    <string name="action_settings">Cài đặt</string>
+    <string name="create_account">Tạo tài khoản</string>
+    <string name="enter_full_name">Họ và tên</string>
+</resources>
