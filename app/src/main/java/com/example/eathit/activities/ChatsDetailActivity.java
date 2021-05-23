@@ -48,6 +48,8 @@ public class ChatsDetailActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
 
 
+
+
 //        binding.profileImage.setImageResource(Integer.parseInt(getIntent().getStringExtra("profilePic")));
         binding.tvUserName.setText(getIntent().getStringExtra("userName"));
         receiverId = getIntent().getStringExtra("userId");
