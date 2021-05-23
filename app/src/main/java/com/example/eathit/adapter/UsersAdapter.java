@@ -46,6 +46,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
     Socket mSocket;
     String theLastMessage = "";
     FirebaseAuth auth;
+    IOnClickUser iOnClickUser;
     public UsersAdapter(List<User> list, Context context, Socket mSocket, boolean isOnline) {
         this.list = list;
         this.context = context;
