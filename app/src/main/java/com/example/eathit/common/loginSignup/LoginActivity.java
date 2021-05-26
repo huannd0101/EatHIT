@@ -1,5 +1,6 @@
 package com.example.eathit.common.loginSignup;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -59,7 +60,6 @@ public class LoginActivity extends AppCompatActivity {
     //sign up with google
     GoogleSignInClient mGoogleSignInClient;
     CallbackManager callbackManager;
-    LoginButton loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,16 +80,16 @@ public class LoginActivity extends AppCompatActivity {
 
         callbackManager = CallbackManager.Factory.create();
 
-        loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email");
+        binding.loginButton.setReadPermissions("email");
         // If using in a fragment
 //        loginButton.setFragment(this);
 
         // Callback registration
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        binding.loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // App code
+                loginFacebook();
             }
 
             @Override
@@ -104,34 +104,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-        callbackManager = CallbackManager.Factory.create();
-
-        LoginManager.getInstance().registerCallback(callbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        // App code
-//                        Toast.makeText(LoginActivity.this, "Thành công", Toast.LENGTH_SHORT).show();
-                        firebaseAuthWithFacebook(loginResult.getAccessToken().getToken());
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        // App code
-                        Toast.makeText(LoginActivity.this, "cancel", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        // App code
-                        Toast.makeText(LoginActivity.this, "Thất bại", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
 
 
         //
@@ -214,22 +186,53 @@ public class LoginActivity extends AppCompatActivity {
         binding.btnSignUpWithGoogle.setOnClickListener(v -> signInWithGoogle());
 
     }
+
+
+
     ////////////////////////login facebook
     //tự động tạo ra mã hash key
     public static void printHashKey(Context pContext) {
         try {
-            PackageInfo info = pContext.getPackageManager().getPackageInfo(pContext.getPackageName(), PackageManager.GET_SIGNATURES);
+            @SuppressLint("PackageManagerGetSignatures") PackageInfo info = pContext.getPackageManager().getPackageInfo(pContext.getPackageName(), PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
                 String hashKey = new String(Base64.encode(md.digest(), 0));
                 Log.i("TAG", "printHashKey() Hash Key: " + hashKey);
             }
-        } catch (NoSuchAlgorithmException e) {
-            Log.e("TAG", "printHashKey()", e);
         } catch (Exception e) {
             Log.e("TAG", "printHashKey()", e);
         }
+    }
+
+    private void loginFacebook() {
+        callbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        // App code
+//                        Toast.makeText(LoginActivity.this, "Thành công", Toast.LENGTH_SHORT).show();
+                        firebaseAuthWithFacebook(loginResult.getAccessToken().getToken());
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // App code
+                        Toast.makeText(LoginActivity.this, "cancel", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                        Toast.makeText(LoginActivity.this, "Thất bại", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+
+        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
     }
 
     private void firebaseAuthWithFacebook(String idToken){
@@ -261,10 +264,6 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-
     }
 
 
@@ -276,12 +275,12 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        //callback of facebook
         callbackManager.onActivityResult(requestCode, resultCode, data);
 
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...); (google)
         if (requestCode == Constants.RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
@@ -295,8 +294,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.w("TAG", "Google sign in failed", e);
             }
         }
-
-
+        //
 
     }
 
@@ -358,15 +356,15 @@ public class LoginActivity extends AppCompatActivity {
         binding.linearLayout2.animate().translationY(0).alpha(1).setDuration(1800).setStartDelay(1500).start();
         binding.btnLogin.animate().translationY(0).alpha(1).setDuration(1800).setStartDelay(1800).start();
 
-//        binding.fabFb.setTranslationX(800);
+        binding.cvFb.setTranslationX(800);
         binding.btnSignUpWithGoogle.setTranslationX(800);
         binding.fabTwitter.setTranslationX(800);
 
-//        binding.fabFb.setAlpha((float) 0);
+        binding.cvFb.setAlpha((float) 0);
         binding.btnSignUpWithGoogle.setAlpha((float) 0);
         binding.fabTwitter.setAlpha((float) 0);
 
-//        binding.fabFb.animate().translationX(0).alpha(1).setDuration(1800).setStartDelay(1400).start();
+        binding.cvFb.animate().translationX(0).alpha(1).setDuration(1800).setStartDelay(1400).start();
         binding.btnSignUpWithGoogle.animate().translationX(0).alpha(1).setDuration(1800).setStartDelay(1600).start();
         binding.fabTwitter.animate().translationX(0).alpha(1).setDuration(1800).setStartDelay(1800).start();
     }

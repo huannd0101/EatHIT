@@ -31,11 +31,9 @@ public class ChatActivity extends AppCompatActivity {
         
         binding.viewPager.setAdapter(new FragmentChatAdapter(getSupportFragmentManager()));
         binding.tabLayout.setupWithViewPager(binding.viewPager);
-
-
     }
-    private void isOnline(String isOnline){
 
+    private void isOnline(String isOnline){
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("isOnline", isOnline);
 

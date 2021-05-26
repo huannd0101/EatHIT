@@ -155,14 +155,33 @@
 <!--            app:layout_constraintHorizontal_bias="1"-->
 <!--            app:layout_constraintStart_toStartOf="parent" />-->
 
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/login_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cvFb"
+            app:cardCornerRadius="100dp"
+            app:layout_constraintEnd_toStartOf="@+id/btnSignUpWithGoogle"
+            app:layout_constraintHorizontal_bias="0.9"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/login_button"
+                android:layout_width="60dp"
+                android:background="#fff"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingTop="20.5dp"
+                android:paddingBottom="20.5dp"
+                android:text=""
+            />
+            <ImageView
+                android:layout_gravity="center"
+                android:src="@drawable/facebook"
+                android:layout_width="30dp"
+                android:layout_height="30dp"/>
+        </androidx.cardview.widget.CardView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnSignUpWithGoogle"

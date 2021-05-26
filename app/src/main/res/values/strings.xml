@@ -40,6 +40,7 @@
     <string name="qr_code" translatable="false">QR Code</string>
 
 
-    <string name="facebook_app_id" translatable="false">510387363336471</string> <string name="fb_login_protocol_scheme" translatable="false">fb510387363336471</string>
+    <string name="facebook_app_id" translatable="false">510387363336471</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb510387363336471</string>
 
 </resources>
