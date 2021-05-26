@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.eathit.activities.ChatActivity;
+import com.example.eathit.adapter.IOnClickUser;
 import com.example.eathit.adapter.UsersAdapter;
 import com.example.eathit.application.SocketApplication;
 import com.example.eathit.databinding.FragmentUsersBinding;
@@ -63,7 +64,14 @@ public class UsersFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         binding.rclAllUsers.setLayoutManager(linearLayoutManager);
 
-        adapter = new UsersAdapter(users, getContext(), mSocket, true);
+
+
+        adapter = new UsersAdapter(users, getContext(), new IOnClickUser() {
+            @Override
+            public void clickUser(User user, Socket socket) {
+
+            }
+        }, true);
         binding.rclAllUsers.setAdapter(adapter);
 
 

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.example.eathit.R;
+import com.example.eathit.api.Message;
 import com.example.eathit.modules.Chat;
 import com.example.eathit.modules.ChatTest;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,12 +27,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public static  final int MSG_TYPE_LEFT = 0;
     public static  final int MSG_TYPE_RIGHT = 1;
 
-    private Context mContext;
-    private List<ChatTest> mChat;
+    private final Context mContext;
+    private final List<Message> mChat;
 
     FirebaseUser fuser;
 
-    public MessageAdapter(Context mContext, List<ChatTest> mChat){
+    public MessageAdapter(Context mContext, List<Message> mChat){
         this.mChat = mChat;
         this.mContext = mContext;
     }
@@ -51,9 +52,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        ChatTest chat = mChat.get(position);
+        Message chat = mChat.get(position);
 
-        holder.show_message.setText(chat.getMessage());
+        holder.show_message.setText(chat.getContent());
 //        if (position == mChat.size()-1){
 //            if (chat.getIsSeen()){
 //                holder.txt_seen.setText("Seen");
@@ -63,11 +64,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 //        } else {
 //            holder.txt_seen.setVisibility(View.GONE);
 //        }
+
 //        timestamp
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-        if(simpleDateFormat != null){
-            holder.timestamp.setText(simpleDateFormat.format(new Date(chat.getTimestamp())));
-        }
+//        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+//        holder.timestamp.setText(simpleDateFormat.format(new Date(Long.parseLong(String.valueOf(chat.getCreateAt())))));
 
     }
 

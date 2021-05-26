@@ -1,33 +1,29 @@
 package com.example.eathit.fragmentChat;
 
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.example.eathit.activities.ChatsDetailActivity;
 import com.example.eathit.adapter.UsersAdapter;
-import com.example.eathit.api.JsonPlaceHolder;
-import com.example.eathit.api.Message;
+import com.example.eathit.api.ApiServices;
 import com.example.eathit.api.RoomChat;
 import com.example.eathit.application.SocketApplication;
 import com.example.eathit.databinding.FragmentChatsBinding;
 import com.example.eathit.modules.User;
+import com.example.eathit.utilities.Constants;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -38,24 +34,23 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.Response;
 
 public class ChatsFragment extends Fragment {
     private FragmentChatsBinding binding;
     Socket mSocket;
-    List<User> users;
+    List<User> users = new ArrayList<>();
     UsersAdapter adapter;
     FirebaseDatabase database;
-
+    FirebaseUser currentUser;
     List<RoomChat> roomChats;
+    Set<String> listUserId = new HashSet<>();
     String url = "https://api-mess.herokuapp.com/";
+
 
     public static ChatsFragment newInstance(String param1, String param2) {
         ChatsFragment fragment = new ChatsFragment();
@@ -76,7 +71,7 @@ public class ChatsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentChatsBinding.inflate(inflater, container, false);
         // Inflate the layout for this fragment
@@ -84,49 +79,68 @@ public class ChatsFragment extends Fragment {
         mSocket = socketApplication.getSocket();
 
         roomChats = new ArrayList<>();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        //retrofit
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(url)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        JsonPlaceHolder jsonPlaceHolder = retrofit.create(JsonPlaceHolder.class);
-        Call<List<RoomChat>> call = jsonPlaceHolder.getRoomChats();
-        call.enqueue(new Callback<List<RoomChat>>() {
+        //--------------retrofit
+        ApiServices.apiServices.getRoomChats().enqueue(new Callback<List<RoomChat>>() {
             @Override
-            public void onResponse(Call<List<RoomChat>> call, retrofit2.Response<List<RoomChat>> response) {
-                if(!response.isSuccessful()){
-                    Toast.makeText(getContext(), "Call api lõi", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            public void onResponse(@NotNull Call<List<RoomChat>> call, @NotNull Response<List<RoomChat>> response) {
                 roomChats = response.body();
-                assert roomChats != null;
-                users = new ArrayList<>();
-
-
-                if(roomChats.size() > 0){
-                    getListUser();
-                }else {
-                    Toast.makeText(getContext(), "Khoong xu li", Toast.LENGTH_SHORT).show();
-                }
                 Toast.makeText(getContext(), roomChats.toString(), Toast.LENGTH_SHORT).show();
+                for(RoomChat roomChat : roomChats){
+                    if(roomChat.getSender().equals(currentUser.getUid()) ||
+                        roomChat.getReceiver().equals(currentUser.getUid())){
+                        if(roomChat.getSender().equals(currentUser.getUid())){
+                            listUserId.add(roomChat.getReceiver());
+                        }else {
+                            listUserId.add(roomChat.getSender());
+                        }
+                    }
+                }
 
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+                getListUser();
+
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false);
                 binding.chatRclView.setLayoutManager(linearLayoutManager);
 
-                adapter = new UsersAdapter(users, getContext(), mSocket, true);
+                adapter = new UsersAdapter(users, getContext(), (user, socket) -> {
+                    Intent intent = new Intent(getContext(),  ChatsDetailActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                    String roomId = "";
+                    for(RoomChat roomChat : roomChats){
+                        if((roomChat.getSender().equals(currentUser.getUid()) &&
+                                roomChat.getReceiver().equals(user.getUserId())) ||
+                                (roomChat.getReceiver().equals(currentUser.getUid()) &&
+                                        roomChat.getSender().equals(user.getUserId()))){
+                            roomId = roomChat.getId()+"";
+                            break;
+                        }
+                    }
+
+                    intent.putExtra("userId", user.getUserId());
+                    intent.putExtra("profilePic", user.getProfilePic());
+                    intent.putExtra("userName", user.getFullName());
+                    intent.putExtra("isOnline", user.getIsOnline());
+                    intent.putExtra("room", roomId);
+
+                    mSocket.emit(Constants.CLIENT_SEND_ROOM, roomId);
+
+                    requireContext().startActivity(intent);
+
+                    Toast.makeText(getContext(), user.getFullName(), Toast.LENGTH_SHORT).show();
+                }, true);
+
                 binding.chatRclView.setAdapter(adapter);
             }
 
             @Override
             public void onFailure(Call<List<RoomChat>> call, Throwable t) {
-                Toast.makeText(getContext(), "Không thể call api", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Failed", Toast.LENGTH_SHORT).show();
             }
         });
-        //end retrogit
 
-        //khởi tạo list
+        //end retrofit
+
 
 
 
@@ -134,7 +148,51 @@ public class ChatsFragment extends Fragment {
         return binding.getRoot();
     }
 
-    private void getListUser() {
+    private void getListUser(){
+        database = FirebaseDatabase.getInstance();
+        database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                Set<String> set = new HashSet<>();
+                for(RoomChat roomChat : roomChats){
+                    set.add(roomChat.getSender());
+                    set.add(roomChat.getReceiver());
+                }
+
+                users.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    User user = dataSnapshot.getValue(User.class);
+                    if (user != null) {
+                        user.setUserId(dataSnapshot.getKey());
+
+                        //loại bỏ current user from list
+                        if (user.getUserId().equals(FirebaseAuth.getInstance().getUid()))
+                            continue;
+
+                        //loại bỏ những ai chưa chat
+                        for(String s : set){
+                            for(String listUserId2 : listUserId){
+                                if(listUserId2.equals(s)){
+                                    if(user.getUserId().equals(listUserId2)){
+                                        users.add(user);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void getListUser2() {
         database = FirebaseDatabase.getInstance();
         database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
             @Override
@@ -157,14 +215,19 @@ public class ChatsFragment extends Fragment {
                             continue;
                         //loại bỏ những ai chưa chat
                         for(String s : set){
-                            if(user.getUserId().equals(s)){
-                                users.add(user);
+//                            if(user.getUserId().equals(s)){
+//                                users.add(user);
+//                            }
+                            for(String listUserId2 : listUserId){
+                                if(listUserId2.equals(s)){
+                                    users.add(user);
+                                }
                             }
                         }
 
                     }
                 }
-                adapter.notifyDataSetChanged();
+
             }
 
             @Override

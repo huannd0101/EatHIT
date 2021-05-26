@@ -1,8 +1,5 @@
 package com.example.eathit.adapter;
 
-
-
-
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -47,12 +44,20 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
     String theLastMessage = "";
     FirebaseAuth auth;
     IOnClickUser iOnClickUser;
-    public UsersAdapter(List<User> list, Context context, Socket mSocket, boolean isOnline) {
+
+    public UsersAdapter(List<User> list, Context context, IOnClickUser iOnClickUser, boolean isOnline) {
         this.list = list;
         this.context = context;
-        this.mSocket = mSocket;
+        this.iOnClickUser = iOnClickUser;
         this.isOnline = isOnline;
     }
+
+//    public UsersAdapter(List<User> list, Context context, Socket mSocket, boolean isOnline) {
+//        this.list = list;
+//        this.context = context;
+//        this.mSocket = mSocket;
+//        this.isOnline = isOnline;
+//    }
 
     @NonNull
     @Override
@@ -98,23 +103,27 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
 
         String currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context,  ChatsDetailActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-                intent.putExtra("userId", users.getUserId());
-                intent.putExtra("profilePic", users.getProfilePic());
-                intent.putExtra("userName", users.getFullName());
-                intent.putExtra("isOnline", users.getIsOnline());
-                String room = currentUserId+"|"+users.getUserId();
-                intent.putExtra("room", "huan");
-
-                mSocket.emit(Constants.CLIENT_SEND_ROOM, "huan");
-
-                context.startActivity(intent);
-            }
+        holder.itemView.setOnClickListener(v -> {
+            iOnClickUser.clickUser(users, mSocket);
         });
+//        holder.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(context,  ChatsDetailActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//
+//                intent.putExtra("userId", users.getUserId());
+//                intent.putExtra("profilePic", users.getProfilePic());
+//                intent.putExtra("userName", users.getFullName());
+//                intent.putExtra("isOnline", users.getIsOnline());
+//                String room = currentUserId+"|"+users.getUserId();
+//                intent.putExtra("room", "huan");
+//
+//                mSocket.emit(Constants.CLIENT_SEND_ROOM, "huan");
+//
+//                context.startActivity(intent);
+//            }
+//        });
 
     }
 

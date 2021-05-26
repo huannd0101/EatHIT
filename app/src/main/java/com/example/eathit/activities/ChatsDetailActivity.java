@@ -1,17 +1,22 @@
 package com.example.eathit.activities;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.eathit.R;
 import com.example.eathit.adapter.MessageAdapter;
+import com.example.eathit.api.ApiServices;
+import com.example.eathit.api.Message;
 import com.example.eathit.application.SocketApplication;
 import com.example.eathit.databinding.ActivityChatsDetailBinding;
+import com.example.eathit.dto.MessageDTO;
 import com.example.eathit.modules.ChatTest;
 import com.example.eathit.utilities.Constants;
 import com.github.nkzawa.emitter.Emitter;
@@ -24,15 +29,21 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ChatsDetailActivity extends AppCompatActivity {
     Socket mSocket;
     List<ChatTest> chatTests;
+    List<Message> messages;
     MessageAdapter adapter;
     ActivityChatsDetailBinding binding;
     FirebaseAuth mAuth;
@@ -40,15 +51,14 @@ public class ChatsDetailActivity extends AppCompatActivity {
     FirebaseDatabase database;
     String currentUserId;
     String receiverId;
+    LinearLayoutManager linearLayoutManager;
+    List<Message> messageList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityChatsDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Objects.requireNonNull(getSupportActionBar()).hide();
-
-
-
 
 //        binding.profileImage.setImageResource(Integer.parseInt(getIntent().getStringExtra("profilePic")));
         binding.tvUserName.setText(getIntent().getStringExtra("userName"));
@@ -61,18 +71,22 @@ public class ChatsDetailActivity extends AppCompatActivity {
 
         mSocket = socketApplication.getSocket();
 
-        chatTests = new ArrayList<>();
+        //đọc tin nhắn cũ
+        readMessages();
 
-        adapter = new MessageAdapter(this, chatTests);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
-        binding.chatRclView.setAdapter(adapter);
-        binding.chatRclView.setLayoutManager(linearLayoutManager);
+//        chatTests = new ArrayList<>();
+
+//        adapter = new MessageAdapter(this, messages);
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
+//        binding.chatRclView.setAdapter(adapter);
+//        binding.chatRclView.setLayoutManager(linearLayoutManager);
 
         //chat tự động xuống dưới
-        linearLayoutManager.setReverseLayout(false);
-        linearLayoutManager.setSmoothScrollbarEnabled(true);
-        linearLayoutManager.setStackFromEnd(true);
-        adapter.notifyDataSetChanged();
+//
+//        linearLayoutManager.setReverseLayout(false);
+//        linearLayoutManager.setSmoothScrollbarEnabled(true);
+//        linearLayoutManager.setStackFromEnd(true);
+//        adapter.notifyDataSetChanged();
 
         //lắng nghe từ server
         mSocket.on(Constants.SERVER_SEND_MESSAGE, serverSendMessageListener);
@@ -103,9 +117,12 @@ public class ChatsDetailActivity extends AppCompatActivity {
         binding.btnSend.setOnClickListener(v -> {
             JSONObject jsonObject = new JSONObject();
             try {
-                Date date = new Date();
+                String content = binding.edtTextPersonName.getText().toString().trim();
+                if(content.isEmpty()){
+                    return;
+                }
                 jsonObject.put("sender", currentUserId);
-                jsonObject.put("timestamp", date.getTime());
+                jsonObject.put("receiver", receiverId);
                 jsonObject.put("message", binding.edtTextPersonName.getText().toString());
 
                 String room = getIntent().getStringExtra("room");
@@ -113,18 +130,74 @@ public class ChatsDetailActivity extends AppCompatActivity {
                 jsonObject.put("room", room);
                 mSocket.emit(Constants.Client_SEND_MESSAGE, jsonObject);
 
+                MessageDTO messageDTO = new MessageDTO();
+                messageDTO.setContent(content);
+                messageDTO.setSender(user.getUid());
+                messageDTO.setReceiver(receiverId);
+                messageDTO.setRoomChat(Integer.parseInt(room));
+                sendMessage(messageDTO);
+
                 binding.edtTextPersonName.setText("");
+                adapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         });
 
         binding.backToMain.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-            startActivity(intent);
-            finish();
+            onBackPressed();
         });
 
+    }
+
+    private void sendMessage(MessageDTO messageDTO){
+        ApiServices.apiServices.postNewMessage(messageDTO).enqueue(new Callback<MessageDTO>() {
+            @Override
+            public void onResponse(Call<MessageDTO> call, Response<MessageDTO> response) {
+                Toast.makeText(ChatsDetailActivity.this, response.body().toString(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<MessageDTO> call, Throwable t) {
+                Toast.makeText(ChatsDetailActivity.this, "Send failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void readMessages(){
+        messages = new ArrayList<>();
+        ApiServices.apiServices.getMessage().enqueue(new Callback<List<Message>>() {
+            @Override
+            public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
+                Toast.makeText(ChatsDetailActivity.this, response.body().toString(), Toast.LENGTH_SHORT).show();
+                messages.clear();
+                messages = response.body();
+
+                messageList.clear();
+
+                for(Message message : messages){
+                    if((message.getSender().equals(user.getUid()) && message.getReceiver().equals(receiverId))
+                        || (message.getSender().equals(receiverId) && message.getReceiver().equals(user.getUid()))) {
+                        messageList.add(message);
+                    }
+                }
+
+                adapter = new MessageAdapter(getApplicationContext(), messageList);
+                linearLayoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
+                binding.chatRclView.setAdapter(adapter);
+                binding.chatRclView.setLayoutManager(linearLayoutManager);
+
+                linearLayoutManager.setReverseLayout(false);
+                linearLayoutManager.setSmoothScrollbarEnabled(true);
+                linearLayoutManager.setStackFromEnd(true);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<Message>> call, Throwable t) {
+                Toast.makeText(ChatsDetailActivity.this, "Lỗi call message", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void isOnline(String isOnline){
@@ -164,18 +237,29 @@ public class ChatsDetailActivity extends AppCompatActivity {
         @Override
         public void call(Object... args) {
             runOnUiThread(new Runnable() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void run() {
                     System.out.println(args[0].toString());
                     JSONObject jsonObject = (JSONObject) args[0];
                     try {
                         String message = (String) jsonObject.get("message");
-                        long timestamp = (long) jsonObject.get("timestamp");
 
-                        chatTests.add(new ChatTest(message, (String) jsonObject.get("sender"), timestamp));
+                        messageList.add(
+                                new Message(
+                                        message,
+                                        (String) jsonObject.get("sender"),
+                                        (String) jsonObject.get("receiver"),
+                                        jsonObject.getInt("room")
+                                        ));
+
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    linearLayoutManager.setReverseLayout(false);
+                    linearLayoutManager.setSmoothScrollbarEnabled(true);
+                    linearLayoutManager.setStackFromEnd(true);
                     adapter.notifyDataSetChanged();
                 }
             });

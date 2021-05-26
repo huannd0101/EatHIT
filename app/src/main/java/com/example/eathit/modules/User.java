@@ -65,4 +65,14 @@ public class User {
     public void setIsOnline(String isOnline) {
         this.isOnline = isOnline;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId='" + userId + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", profilePic='" + profilePic + '\'' +
+                ", isOnline='" + isOnline + '\'' +
+                '}';
+    }
 }

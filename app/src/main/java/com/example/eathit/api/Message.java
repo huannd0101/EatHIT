@@ -1,5 +1,6 @@
 package com.example.eathit.api;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 
 public class Message {
@@ -19,7 +20,21 @@ public class Message {
         this.createAt = createAt;
     }
 
-    public Message() {
+    public Message(String content, String sender, Integer roomChat, Timestamp createAt) {
+        this.content = content;
+        this.sender = sender;
+        this.roomChat = roomChat;
+        this.createAt = createAt;
+    }
+
+    public Message(String content, String sender, String receiver, Integer roomChat) {
+        this.content = content;
+        this.sender = sender;
+        this.receiver = receiver;
+        this.roomChat = roomChat;
+    }
+
+    public Message(String message, String sender, int room, long timestamp) {
     }
 
     public Integer getMessageId() {
@@ -68,5 +83,17 @@ public class Message {
 
     public void setCreateAt(Timestamp createAt) {
         this.createAt = createAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "messageId=" + messageId +
+                ", content='" + content + '\'' +
+                ", sender='" + sender + '\'' +
+                ", receiver='" + receiver + '\'' +
+                ", roomChat=" + roomChat +
+                ", createAt=" + createAt +
+                '}';
     }
 }
