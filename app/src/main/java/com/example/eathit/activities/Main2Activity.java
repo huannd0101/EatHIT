@@ -18,6 +18,7 @@ import com.example.eathit.application.SocketApplication;
 import com.example.eathit.common.loginSignup.LoginActivity;
 import com.example.eathit.databinding.ActivityMain2Binding;
 import com.example.eathit.utilities.Constants;
+import com.facebook.login.LoginManager;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -54,7 +55,6 @@ public class Main2Activity extends AppCompatActivity implements TextToSpeech.OnI
     FirebaseUser user;
 
     TextToSpeech textToSpeech;
-
 
 
     @Override
@@ -121,7 +121,8 @@ public class Main2Activity extends AppCompatActivity implements TextToSpeech.OnI
                 startActivity(intent);
                 break;
             case R.id.action_settings:
-                Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(Main2Activity.this, SettingsActivity.class));
                 break;
             case R.id.action_helps:
                 speak(); //nói
@@ -130,6 +131,7 @@ public class Main2Activity extends AppCompatActivity implements TextToSpeech.OnI
                 openScannerActivity();
                 break;
             case R.id.action_logout:
+                LoginManager.getInstance().logOut();
                 isOnline("offline");
                 auth.signOut();
                 Intent intent1 = new Intent(Main2Activity.this, LoginActivity.class);
@@ -192,10 +194,9 @@ public class Main2Activity extends AppCompatActivity implements TextToSpeech.OnI
             if (result.getContents() == null) {
                 // không quét đc mã QR hoặc không được cấp phép truy cập CAMERA
                 Toast.makeText(this, "Không thấy mã QR Code", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                String content=result.getContents();// nội dung mã QR
-                String format=result.getFormatName();//định dạng của mã QR
+            } else {
+                String content = result.getContents();// nội dung mã QR
+                String format = result.getFormatName();//định dạng của mã QR
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(content));
                 startActivity(intent);
             }
@@ -235,8 +236,6 @@ public class Main2Activity extends AppCompatActivity implements TextToSpeech.OnI
     }
 
 
-
-
     //   //Quét mã QR
     private void openScannerActivity() {
         IntentIntegrator integrator = new IntentIntegrator(this);
@@ -245,13 +244,6 @@ public class Main2Activity extends AppCompatActivity implements TextToSpeech.OnI
         integrator.setTimeout(30000);//giới hạn thời gian quét
         integrator.initiateScan(IntentIntegrator.ALL_CODE_TYPES);
     }
-
-
-
-
-
-
-
 
     @Override
     protected void onResume() {

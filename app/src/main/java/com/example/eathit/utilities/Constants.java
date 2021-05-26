@@ -15,4 +15,6 @@ public class Constants {
     public static final String KEY_PREFERENCE_NAME = "EatHIT";
     public static final String CLIENT_IS_ONLINE = "is-online";
     public static final String SERVER_IS_ONLINE = "server-is-online";
+
+    public static final String ON_BOARDING_SCREEN = "on-boarding-screen";
 }

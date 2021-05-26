@@ -1,8 +1,10 @@
 package com.example.eathit.fragmentChat;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -36,6 +38,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -77,7 +80,6 @@ public class ChatsFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentChatsBinding.inflate(inflater, container, false);
         // Inflate the layout for this fragment
-
         SocketApplication socketApplication = (SocketApplication) requireActivity().getApplication();
         mSocket = socketApplication.getSocket();
 
