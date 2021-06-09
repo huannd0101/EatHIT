@@ -20,7 +20,7 @@
         app:showAsAction="never" />
 
     <item
-        android:icon="@drawable/ic_baseline_chat_24"
+        android:icon="@drawable/ic_message"
         android:id="@+id/action_chats"
         android:orderInCategory="100"
         android:title="@string/action_chats"

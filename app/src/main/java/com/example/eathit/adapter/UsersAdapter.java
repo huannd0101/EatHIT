@@ -52,13 +52,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
         this.isOnline = isOnline;
     }
 
-//    public UsersAdapter(List<User> list, Context context, Socket mSocket, boolean isOnline) {
-//        this.list = list;
-//        this.context = context;
-//        this.mSocket = mSocket;
-//        this.isOnline = isOnline;
-//    }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -105,7 +98,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
 
 
         holder.itemView.setOnClickListener(v -> {
-            iOnClickUser.clickUser(users, mSocket);
+            iOnClickUser.clickUser(users, mSocket, position);
         });
 //        holder.itemView.setOnClickListener(new View.OnClickListener() {
 //            @Override
