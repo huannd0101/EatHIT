@@ -37,7 +37,10 @@ public class GalleryFragment extends Fragment {
             }
         });
         String abc ="Anh phongf depj trai";
-        String oke ="Em eei";
+        String oke ="Em eei develop";
+
+        String okemoi="clmm";
+
 
         return root;
 
