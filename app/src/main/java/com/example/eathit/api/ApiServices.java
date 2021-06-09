@@ -1,6 +1,7 @@
 package com.example.eathit.api;
 
-import com.example.eathit.dto.MessageDTO;
+import com.example.eathit.api.dto.MessageDTO;
+import com.example.eathit.api.dto.RoomChatDTO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -12,7 +13,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 
 public interface ApiServices {
     String url = "https://api-mess.herokuapp.com/";
@@ -34,7 +34,7 @@ public interface ApiServices {
     Call<List<Message>> getMessage();
 
     @POST("api/roomchats")
-    Call<RoomChat> postNewRoomChat();
+    Call<RoomChat> postNewRoomChat(@Body RoomChatDTO roomChatDTO);
 
     @POST("api/messages")
     Call<MessageDTO> postNewMessage(@Body MessageDTO messageDTO);

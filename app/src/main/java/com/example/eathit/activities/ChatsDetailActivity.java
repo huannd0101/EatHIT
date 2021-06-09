@@ -16,7 +16,7 @@ import com.example.eathit.api.ApiServices;
 import com.example.eathit.api.Message;
 import com.example.eathit.application.SocketApplication;
 import com.example.eathit.databinding.ActivityChatsDetailBinding;
-import com.example.eathit.dto.MessageDTO;
+import com.example.eathit.api.dto.MessageDTO;
 import com.example.eathit.modules.ChatTest;
 import com.example.eathit.utilities.Constants;
 import com.github.nkzawa.emitter.Emitter;
@@ -29,9 +29,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -125,7 +123,7 @@ public class ChatsDetailActivity extends AppCompatActivity {
                 jsonObject.put("receiver", receiverId);
                 jsonObject.put("message", binding.edtTextPersonName.getText().toString());
 
-                String room = getIntent().getStringExtra("room");
+                int room = getIntent().getIntExtra("room", 0);
 
                 jsonObject.put("room", room);
                 mSocket.emit(Constants.Client_SEND_MESSAGE, jsonObject);
@@ -134,7 +132,7 @@ public class ChatsDetailActivity extends AppCompatActivity {
                 messageDTO.setContent(content);
                 messageDTO.setSender(user.getUid());
                 messageDTO.setReceiver(receiverId);
-                messageDTO.setRoomChat(Integer.parseInt(room));
+                messageDTO.setRoomChat(room);
                 sendMessage(messageDTO);
 
                 binding.edtTextPersonName.setText("");
@@ -143,6 +141,23 @@ public class ChatsDetailActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
+
+        //btn call audio
+        binding.btnCallAudio.setOnClickListener(v -> {
+            Toast.makeText(getApplicationContext(), "Chưa phát triển", Toast.LENGTH_SHORT).show();
+        });
+        //btn call video
+        binding.btnCallVideo.setOnClickListener(v -> {
+            Toast.makeText(getApplicationContext(), "Chưa phát triển", Toast.LENGTH_SHORT).show();
+        });
+        //btn more
+        binding.btnMore.setOnClickListener(v -> {
+            Toast.makeText(getApplicationContext(), "Chưa phát triển", Toast.LENGTH_SHORT).show();
+        });
+
+
+
+
 
         binding.backToMain.setOnClickListener(v -> {
             onBackPressed();
@@ -154,7 +169,7 @@ public class ChatsDetailActivity extends AppCompatActivity {
         ApiServices.apiServices.postNewMessage(messageDTO).enqueue(new Callback<MessageDTO>() {
             @Override
             public void onResponse(Call<MessageDTO> call, Response<MessageDTO> response) {
-                Toast.makeText(ChatsDetailActivity.this, response.body().toString(), Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
@@ -169,7 +184,6 @@ public class ChatsDetailActivity extends AppCompatActivity {
         ApiServices.apiServices.getMessage().enqueue(new Callback<List<Message>>() {
             @Override
             public void onResponse(Call<List<Message>> call, Response<List<Message>> response) {
-                Toast.makeText(ChatsDetailActivity.this, response.body().toString(), Toast.LENGTH_SHORT).show();
                 messages.clear();
                 messages = response.body();
 

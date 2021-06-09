@@ -66,8 +66,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 //        }
 
 //        timestamp
-//        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
-//        holder.timestamp.setText(simpleDateFormat.format(new Date(Long.parseLong(String.valueOf(chat.getCreateAt())))));
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+        holder.timestamp.setText(simpleDateFormat.format(new Date(chat.getCreateAt().getTime())));
 
     }
 

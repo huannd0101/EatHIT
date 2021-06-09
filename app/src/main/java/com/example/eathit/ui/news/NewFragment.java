@@ -1,4 +1,4 @@
-package com.example.eathit.ui.slideshow;
+package com.example.eathit.ui.news;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.eathit.databinding.FragmentSlideshowBinding;
 
-public class SlideshowFragment extends Fragment {
+public class NewFragment extends Fragment {
 
     private com.example.eathit.ui.news.NewViewModel newViewModel;
     private FragmentSlideshowBinding binding;
