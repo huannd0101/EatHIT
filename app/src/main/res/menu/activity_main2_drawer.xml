@@ -10,14 +10,9 @@
             android:title="@string/menu_home" />
 
         <item
-            android:id="@+id/nav_news"
+            android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_baseline_person_24"
             android:title="News" />
-
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_message"
-            android:title="@string/menu_message" />
 
         <item
             android:id="@+id/nav_slideshow"
