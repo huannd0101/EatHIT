@@ -1,4 +1,4 @@
-package com.example.eathit.dto;
+package com.example.eathit.api.dto;
 
 
 public class MessageDTO {

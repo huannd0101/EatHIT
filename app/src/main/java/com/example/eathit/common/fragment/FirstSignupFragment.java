@@ -13,16 +13,10 @@ import androidx.fragment.app.FragmentManager;
 
 
 import com.example.eathit.R;
-import com.example.eathit.common.events.FirstFragmentSignupListener;
+
 import com.example.eathit.common.loginSignup.LoginActivity;
-import com.example.eathit.common.loginSignup.SignupActivity;
 import com.example.eathit.databinding.FragmentFirstSignupBinding;
-import com.example.eathit.utilities.Constants;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 

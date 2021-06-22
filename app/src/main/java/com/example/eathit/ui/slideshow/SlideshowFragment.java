@@ -39,7 +39,7 @@ import java.util.List;
 
 public class SlideshowFragment extends Fragment {
 
-    private SlideshowViewModel slideshowViewModel;
+    private com.example.eathit.ui.news.NewViewModel newViewModel;
     private FragmentSlideshowBinding binding;
 
     String result, resultAccount, resultCmt;
@@ -50,17 +50,19 @@ public class SlideshowFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        slideshowViewModel =
-                new ViewModelProvider(this).get(SlideshowViewModel.class);
+
+
+
+        newViewModel = new ViewModelProvider(this).get(com.example.eathit.ui.news.NewViewModel.class);
 
         binding = FragmentSlideshowBinding.inflate(inflater, container, false);
         binding.imgStatusOnOff.bringToFront();
         //id
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 
-
         RequestQueue queue = Volley.newRequestQueue(getContext());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url + "posts", new Response.Listener<String>() {
+
             @Override
             public void onResponse(String response) {
                 result = response;

@@ -112,7 +112,17 @@
                 android:id="@+id/cvInvite"
                 android:layout_width="160dp"
                 android:layout_height="170dp"
+
+                android:outlineAmbientShadowColor="@color/black"
+                android:elevation="8dp"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="0.0px"
+                android:clipToPadding="false"
+                android:clipChildren="false"
+
+
                 app:cardCornerRadius="40dp">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -125,6 +135,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@+id/cvInvite"
                 app:cardCornerRadius="40dp">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

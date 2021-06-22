@@ -42,5 +42,7 @@
 
     <string name="facebook_app_id" translatable="false">510387363336471</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb510387363336471</string>
+    <string name="menu_notification">Notification</string>
+    <string name="menu_message">Message</string>
 
 </resources>
