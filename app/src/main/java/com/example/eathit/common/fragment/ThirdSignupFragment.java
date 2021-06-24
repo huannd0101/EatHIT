@@ -21,8 +21,15 @@ import com.android.volley.toolbox.Volley;
 import com.example.eathit.common.loginSignup.LoginActivity;
 import com.example.eathit.common.loginSignup.SignupActivity;
 import com.example.eathit.databinding.FragmentThirthSignupBinding;
+import com.example.eathit.modules.User;
 import com.example.eathit.utilities.Constants;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,14 +37,14 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-
 public class ThirdSignupFragment extends Fragment {
     public static final String TAG = FirstSignupFragment.class.getName();
     FragmentThirthSignupBinding binding;
     private ArrayList<String> strings;
     private SignupActivity signupActivity;
     ProgressDialog progressDialog;
-
+    FirebaseAuth auth;
+    FirebaseDatabase database;
 
     public static ThirdSignupFragment newInstance(ArrayList<String> strings) {
         ThirdSignupFragment fragment = new ThirdSignupFragment();
@@ -60,6 +67,9 @@ public class ThirdSignupFragment extends Fragment {
         binding = FragmentThirthSignupBinding.inflate(inflater, container, false);
         //animation
         initAnimate();
+
+        auth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
 
         //progressDialog
         progressDialog = new ProgressDialog(getContext());
@@ -125,7 +135,20 @@ public class ThirdSignupFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        progressDialog.dismiss();
+                        auth.createUserWithEmailAndPassword(strings.get(2), strings.get(3)).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
+                                if(task.isSuccessful()){
+                                    progressDialog.dismiss();
+//                                    User user = new User();
+//                                    String id = task.getResult().getUser().getUid();
+//                                    database.getReference().child("Users").child(id).setValue(user);
+
+                                    Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+
                         startActivity(new Intent(getContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     }
                 }, new Response.ErrorListener() {
@@ -159,16 +182,37 @@ public class ThirdSignupFragment extends Fragment {
         signupActivity.setStrings(strings);
     }
 
+    /*
+    binding.btnSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //bật dialog
+                progressDialog.show();
+
+                mAuth.createUserWithEmailAndPassword
+                        (binding.tiedtEmail.getText().toString(), binding.tiedtPass.getText().toString())
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                //tắt dialog sau khi tạo thành công hoặc thất bại
+                                progressDialog.dismiss();
+                                ///
+                                if(task.isSuccessful()){
+
+                                    Users user = new Users(binding.tiedtUser.getText().toString(), binding.tiedtEmail.getText().toString(), binding.tiedtPass.getText().toString());
+                                    String id = task.getResult().getUser().getUid();
+                                    database.getReference().child("Users").child(id).setValue(user);
 
 
-
-
-
-
-
-
-
-
+                                    Toast.makeText(SignUpActivity.this, "User created successfully", Toast.LENGTH_SHORT).show();
+                                }else {
+                                    Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+        });//Xong phần đăng ký tài khoản
+    * */
 
 
 

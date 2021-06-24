@@ -2,7 +2,6 @@ package com.example.eathit.ui.slideshow;
 
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +22,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import com.example.eathit.databinding.FragmentSlideshowBinding;
-import com.example.eathit.ui.slideshow.API.APIService;
-import com.example.eathit.ui.slideshow.Comment.Comment;
-import com.example.eathit.ui.slideshow.Posts.Posts;
 import com.example.eathit.ui.slideshow.Posts.Posts1;
-import com.example.eathit.ui.slideshow.Posts.PostsAdapter;
 
 
 import org.json.JSONArray;
