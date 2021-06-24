@@ -10,6 +10,7 @@ import android.content.pm.Signature;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -69,6 +70,43 @@ public class LoginActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         //animation
         initAnimate();
+
+
+
+
+        //btn signIn of chatApp
+//        binding.btnSignIn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //xử lý dữ liệu đầu vào
+//                if (binding.tiedtUser.getText().toString().isEmpty()) {
+//                    binding.tiedtUser.setError("Enter your email");
+//                    return;
+//                }
+//
+//                if (binding.tiedtPass.getText().toString().isEmpty()) {
+//                    binding.tiedtPass.setError("Enter your password");
+//                    return;
+//                }
+//
+//                //bật dialog
+//                progressDialog.show();
+//
+//                auth.signInWithEmailAndPassword(binding.tiedtUser.getText().toString(), binding.tiedtPass.getText().toString())
+//                        .addOnCompleteListener(task -> {
+//                            //tắt dialog
+//                            progressDialog.dismiss();
+//
+//                            if (task.isSuccessful()) {
+//                                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+//                                startActivity(intent);
+//                            } else {
+//                                Toast.makeText(SignInActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+//            }
+//        });
+
 
 
         ///////////////////////////////////////Facebook
