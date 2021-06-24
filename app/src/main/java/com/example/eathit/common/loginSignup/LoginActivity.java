@@ -197,9 +197,8 @@ public class LoginActivity extends AppCompatActivity {
                 binding.tilUsername.setError(null);
             }
 
-            //bật dialog
+            //bật dialog.
             progressDialog.show();
-
             auth.signInWithEmailAndPassword(username, password)
                     .addOnCompleteListener(task -> {
                         //tắt dialog
