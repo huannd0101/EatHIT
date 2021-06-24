@@ -73,8 +73,9 @@ public class UsersFragment extends Fragment {
         currentUser = auth.getCurrentUser();
         users = new ArrayList<>();
         isHaveRoom = new ArrayList<>();
+        Toast.makeText(getContext(), "1", Toast.LENGTH_SHORT).show();
         getListUser();
-
+        Toast.makeText(getContext(), "2", Toast.LENGTH_SHORT).show();
         linearLayoutManager = new LinearLayoutManager(getContext());
 
 
@@ -192,6 +193,7 @@ public class UsersFragment extends Fragment {
                     }
                 }
                 adapter.notifyDataSetChanged();
+                Toast.makeText(getContext(), "12312312", Toast.LENGTH_SHORT).show();
             }
 
             @Override

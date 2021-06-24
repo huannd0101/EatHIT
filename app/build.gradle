@@ -78,6 +78,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     //volley
+    // https://mvnrepository.com/artifact/com.android.volley/volley
     implementation group: 'com.android.volley', name: 'volley', version: '1.2.0'
 
     //fb
