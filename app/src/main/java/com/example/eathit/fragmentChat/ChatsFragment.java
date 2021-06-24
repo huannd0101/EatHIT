@@ -52,7 +52,7 @@ public class ChatsFragment extends Fragment {
     Set<String> listUserId = new HashSet<>();
 
 
-    public static ChatsFragment newInstance(String param1, String param2) {
+    public static ChatsFragment newInstance() {
         ChatsFragment fragment = new ChatsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);

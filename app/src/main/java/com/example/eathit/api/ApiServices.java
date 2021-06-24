@@ -1,5 +1,6 @@
 package com.example.eathit.api;
 
+
 import com.example.eathit.api.dto.MessageDTO;
 import com.example.eathit.api.dto.RoomChatDTO;
 import com.google.gson.Gson;
@@ -38,5 +39,11 @@ public interface ApiServices {
 
     @POST("api/messages")
     Call<MessageDTO> postNewMessage(@Body MessageDTO messageDTO);
+
+//    ApiServices apiServicesGetAcc = new Retrofit.Builder()
+//            .baseUrl("https://btl-spring-boot.herokuapp.com/api/accounts/")
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .build()
+//            .create(ApiServices.class);
 
 }
