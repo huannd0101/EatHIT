@@ -19,18 +19,19 @@
             <FrameLayout
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:padding="10dp">
+                >
                 <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:cardCornerRadius="40dp">
+                    android:layout_margin="5dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    app:cardCornerRadius="30dp">
 
                     <ImageView
                         android:id="@+id/img_avt"
                         android:clipChildren="true"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/ic_baseline_person_24" />
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                    />
 
                 </androidx.cardview.widget.CardView>
                 <androidx.cardview.widget.CardView
@@ -75,6 +76,7 @@
                 android:paddingStart="20dp"
                 android:text="createAt"
                 android:textSize="20dp"
+                android:layout_marginTop="3dp"
                 android:textStyle="italic" />
 
             <TextView
@@ -83,14 +85,25 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="20dp"
                 android:text="Content posts"
+                android:ellipsize="end"
+                android:maxLines="3"
                 android:textSize="25dp" />
+            <TextView
+                android:id="@+id/tv_see_more"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:textSize="15dp"
+                android:text="see more"
+                android:layout_gravity="center_vertical|right"
+                android:paddingEnd="20dp"
+                />
+
 
             <ImageView
                 android:id="@+id/imgPosts"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:visibility="gone"
-                android:src="@drawable/android2"
                />
 
             <LinearLayout
@@ -159,7 +172,7 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:src="@drawable/ic_baseline_favorite_24"
-                            app:tint="#9C7E88" />
+                            app:tint="@color/dis_Like" />
 
                         <TextView
                             android:id="@+id/tv_like_Click"
@@ -168,6 +181,7 @@
                             android:paddingStart="3dp"
                             android:text="Thích"
                             android:textSize="20dp"
+                            android:textColor="@color/dis_Like"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
@@ -180,9 +194,9 @@
                     android:gravity="center">
 
                     <ImageView
-
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        app:tint="@color/dis_Like"
                         android:src="@drawable/ic_baseline_mode_comment_24" />
 
                     <TextView
@@ -191,6 +205,7 @@
                         android:paddingStart="3dp"
                         android:text="Bình luận"
                         android:textSize="20dp"
+                        android:textColor="@color/dis_Like"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
