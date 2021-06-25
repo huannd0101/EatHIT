@@ -3,11 +3,67 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/main_color"
     tools:context=".onBoardingScreen.BlankFragment2">
 
-    <ImageView
-        android:src="@drawable/android1"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_marginTop="@dimen/_50sdp"
+            android:id="@+id/part21"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <View
+                android:id="@+id/layer_1_3"
+                android:layout_width="126.98dp"
+                android:layout_height="131.34dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="111dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="108dp"
+                android:background="@drawable/decor1"
+                />
+            <View
+                android:id="@+id/layer_4"
+                android:layout_width="44.63dp"
+                android:layout_height="29.98dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="30.53dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="155dp"
+                android:background="@drawable/decor5"
+                />
+            <View
+                android:id="@+id/layer_1_2"
+                android:layout_width="37dp"
+                android:layout_height="42dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="255.06dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="74.03dp"
+                android:background="@drawable/decor6"
+                />
+            <View
+                android:id="@+id/layer_3"
+                android:layout_width="36dp"
+                android:layout_height="41dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="266dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="259dp"
+                android:background="@drawable/decor7"
+                />
+        </RelativeLayout>
+        <TextView
+            android:layout_marginTop="@dimen/_48sdp"
+            android:layout_marginLeft="@dimen/_50sdp"
+            android:textSize="14sp"
+            android:textColor="@color/white"
+            android:layout_below="@+id/part21"
+            android:text="Find your perfect place for eat, meet\nand eat with friends everywhere..."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
 
 </FrameLayout>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/origin"
+    android:background="@color/main_color"
     android:padding="30dp"
     tools:context=".common.loginSignup.LoginActivity">
 
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:gravity="center"
-        android:text="@string/eat_hit"
+        android:text="@string/app_name"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -121,12 +121,13 @@
     </LinearLayout>
 
     <Button
-        android:background="@color/white"
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:background="@drawable/rectangle_3"
         android:text="@string/login"
+        app:backgroundTint="@color/fill_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
@@ -158,6 +159,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cvFb"
             app:cardCornerRadius="100dp"
+            app:cardBackgroundColor="@color/white"
             app:layout_constraintEnd_toStartOf="@+id/btnSignUpWithGoogle"
             app:layout_constraintHorizontal_bias="0.9"
             app:layout_constraintStart_toStartOf="parent"
@@ -168,13 +170,15 @@
 
             <com.facebook.login.widget.LoginButton
                 android:id="@+id/login_button"
-                android:layout_width="60dp"
-                android:background="#fff"
+                android:layout_width="56dp"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
                 android:layout_gravity="center_horizontal"
-                android:paddingTop="20.5dp"
-                android:paddingBottom="20.5dp"
-                android:text=""
+                android:paddingTop="19dp"
+                android:paddingBottom="10dp"
+                android:text="F"
+                android:textStyle="bold"
+                android:textSize="20sp"
             />
             <ImageView
                 android:layout_gravity="center"

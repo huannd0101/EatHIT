@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/origin"
+    android:background="@color/background_color"
     android:padding="30dp"
     tools:context=".common.fragment.SecondSignupFragment">
 
@@ -117,19 +117,21 @@
             android:id="@+id/btnNextToThirdSignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@color/black"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rectangle_3"
             android:elevation="5dp"
-            android:text="@string/btn_next" />
+            android:text="@string/btn_next"
+            app:backgroundTint="@color/main_color" />
 
         <Button
             android:id="@+id/btnLoginOfSignup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@color/white"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rectangle_3"
             android:elevation="5dp"
-            android:text="@string/btn_login" />
+            android:text="@string/btn_login"
+            app:backgroundTint="@color/main_color" />
 
     </LinearLayout>
 

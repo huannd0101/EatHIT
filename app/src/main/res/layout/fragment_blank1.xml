@@ -3,11 +3,78 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/main_color"
     tools:context=".onBoardingScreen.BlankFragment1">
-
-    <ImageView
-        android:src="@drawable/android"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/part1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <View
+                android:background="@drawable/decor1"
+                android:layout_width="124.14dp"
+                android:layout_height="131.89dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="51.69dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="193.56dp"/>
+            <View
+                android:id="@+id/layer_5_1"
+                android:layout_width="104dp"
+                android:layout_height="127dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="224.68dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="50.95dp"
+                android:background="@drawable/decor2"
+                />
+            <View
+                android:id="@+id/layer_2_1"
+                android:layout_width="26.33dp"
+                android:layout_height="44.45dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="280.96dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="253.62dp"
+                android:background="@drawable/decor3"
+                />
+            <View
+                android:id="@+id/layer_3_1"
+                android:layout_width="66dp"
+                android:layout_height="51dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="80.96dp"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="23.62dp"
+                android:background="@drawable/decor4" />
+
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/part2"
+            android:layout_below="@+id/part1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_36sdp"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:text="Don't Eat\nAlone"/>
+        <TextView
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginLeft="@dimen/_20sdp"
+            android:layout_below="@id/part2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:text="Let us help you invite friends \nto discover the best foods"/>
+    </RelativeLayout>
+
+
+
+
 
 </FrameLayout>
