@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.eathit.R;
 import com.example.eathit.adapter.FragmentOnBoardingAdapter;
 import com.example.eathit.common.loginSignup.LoginActivity;
 import com.example.eathit.databinding.ActivityOnBoardingBinding;
@@ -25,6 +26,9 @@ public class OnBoardingActivity extends AppCompatActivity {
         binding = ActivityOnBoardingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Objects.requireNonNull(getSupportActionBar()).hide();
+
+
+
 
         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
         if(preferenceManager.getBoolean(Constants.ON_BOARDING_SCREEN)){
@@ -63,9 +67,11 @@ public class OnBoardingActivity extends AppCompatActivity {
         });
 
         binding.llNext.setOnClickListener(v -> {
+
             if(binding.viewPager.getCurrentItem() < 2){
                 binding.viewPager.setCurrentItem(binding.viewPager.getCurrentItem() + 1);
             }
+
         });
     }
 }

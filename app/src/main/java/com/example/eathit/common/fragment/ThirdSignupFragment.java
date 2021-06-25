@@ -29,7 +29,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
+
 import org.jetbrains.annotations.NotNull;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,14 +39,15 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import retrofit2.http.HEAD;
+
 public class ThirdSignupFragment extends Fragment {
     public static final String TAG = FirstSignupFragment.class.getName();
     FragmentThirthSignupBinding binding;
     private ArrayList<String> strings;
     private SignupActivity signupActivity;
     ProgressDialog progressDialog;
-    FirebaseAuth auth;
-    FirebaseDatabase database;
+
 
     public static ThirdSignupFragment newInstance(ArrayList<String> strings) {
         ThirdSignupFragment fragment = new ThirdSignupFragment();
@@ -68,8 +71,6 @@ public class ThirdSignupFragment extends Fragment {
         //animation
         initAnimate();
 
-        auth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
 
         //progressDialog
         progressDialog = new ProgressDialog(getContext());
@@ -135,19 +136,6 @@ public class ThirdSignupFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        auth.createUserWithEmailAndPassword(strings.get(2), strings.get(3)).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
-                                if(task.isSuccessful()){
-                                    progressDialog.dismiss();
-//                                    User user = new User();
-//                                    String id = task.getResult().getUser().getUid();
-//                                    database.getReference().child("Users").child(id).setValue(user);
-
-                                    Toast.makeText(getContext(), "User created successfully", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
 
                         startActivity(new Intent(getContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     }
@@ -213,6 +201,19 @@ public class ThirdSignupFragment extends Fragment {
             }
         });//Xong phần đăng ký tài khoản
     * */
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

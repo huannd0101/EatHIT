@@ -9,5 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="origin">#FA7A26</color>
     <color name="like">#E91E63</color>
+    <color name="main_color">#F95F5F</color>
+    <color name="background_color">#FDE6E6</color>
+    <color name="fill_color">#EF9C9C</color>
     <color name="dis_Like">#9C7E88</color>
 </resources>
