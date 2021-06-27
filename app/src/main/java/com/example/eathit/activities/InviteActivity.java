@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -32,6 +33,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 public class InviteActivity extends AppCompatActivity {
     private static final String url = "https://btl-spring-boot.herokuapp.com/api/accounts/";
@@ -48,29 +50,26 @@ public class InviteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invite);
         Objects.requireNonNull(getSupportActionBar()).hide();
-        callPeopleToInvite();
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         String nameOfMe = user.getDisplayName();
+        callPeopleToInvite();
+   //     Toast.makeText(InviteActivity.this,"Tên: "+  nameOfMe, Toast.LENGTH_SHORT).show();
         FirebaseMessaging.getInstance().subscribeToTopic("all");
-        String tittleNotification = nameOfMe + "bạn ơiii";
-        String messageNotification = "Huân muốn mời bạn đi ăn";
+//        String tittleNotification = nameOfMe + "bạn ơiii";
+//        String messageNotification = "Huân muốn mời bạn đi ăn " + getFoodToInvite() + " ngon lắm nha";
         btnSendInvitation = findViewById(R.id.buttonSendInvitation);
         btnSendInvitation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // if(tittleNotification != null || messageNotification != null)
-              //  {
+                    String tittleNotification = nameOfMe + " bạn ơiii";
+                    String messageNotification = randomMessage(getFoodToInvite());
                     FcmNotificationsSender fcmNotificationsSender = new FcmNotificationsSender("/topics/all", tittleNotification, messageNotification, getApplicationContext(), InviteActivity.this);
                     fcmNotificationsSender.SendNotifications();
                     Toast.makeText(InviteActivity.this, "Successfully", Toast.LENGTH_SHORT).show();
-               // }
-//                else
-//                {
-//                    Toast.makeText(InviteActivity.this, "Error noti", Toast.LENGTH_SHORT).show();
-//                }
             }
         });
 
@@ -94,7 +93,8 @@ public class InviteActivity extends AppCompatActivity {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         String FullName = jsonObject.getString("fullname");
                         String LinkAvatar = jsonObject.getString("linkAvt");
-                        //    FullName = convertStringToUTF8(FullName);
+                        //    FullName =
+
                         list.add(new Person(FullName, LinkAvatar));
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(InviteActivity.this, RecyclerView.VERTICAL, false);
                         recyclerView.setLayoutManager(linearLayoutManager);
@@ -114,6 +114,24 @@ public class InviteActivity extends AppCompatActivity {
             }
         });
         requestQueue.add(stringRequest);
+
+    }
+    public String getFoodToInvite()
+    {
+        EditText food = findViewById(R.id.editTextOption);
+        return food.getText().toString();
     }
 
+    public String randomMessage(String food)
+    {
+        List<String> messageInvite = new ArrayList<>();
+        messageInvite.add("Bạn có muốn đi ăn " + food + " không nào? Nhanh nhanh nhá");
+        messageInvite.add("Có người bao bạn đi chén " + food + " đây này, chả nhẽ lại không đi???");
+        messageInvite.add("Làm tí " + food + " không tình yêu ơiiiii");
+        messageInvite.add("Có thực mới vực được đạo, " + food + " là sự lựa chọn không tồi chứ? Đi thôi");
+        messageInvite.add("Đang đói, muốn chén " + food + " nên nhắn bạn đấy thần tài ạ, đi luôn thôi nào");
+        Random rand = new Random();
+        int randomNum = rand.nextInt((messageInvite.size() - 0) + 1) + 0;
+        return messageInvite.get(randomNum);
+    }
 }
