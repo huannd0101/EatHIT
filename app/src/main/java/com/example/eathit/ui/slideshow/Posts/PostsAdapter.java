@@ -51,7 +51,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     String resultCmt;
 
+    int sizeCmt;
 
+
+    RecyclerView revComment;
 
     public PostsAdapter(List<Posts1> listPosts, Context context) {
         this.listPosts = listPosts;
@@ -92,21 +95,22 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
 
         holder.img_status.bringToFront();
-        Friend friend = listPosts.get(position).getAccount();
+        Friend friend1 = listPosts.get(position).getAccount();
 
-        if (friend.getLinkAvt() != "null") {
-            Glide.with(context).load(friend.getLinkAvt()).into(holder.img_avt);
+        if (friend1.getLinkAvt() != "null") {
+            Glide.with(context).load(friend1.getLinkAvt()).into(holder.img_avt);
         } else {
             holder.img_avt.setImageResource(R.drawable.ic_baseline_person_24);
             holder.img_avt.setColorFilter(context.getResources().getColor(R.color.origin));
         }
 
-        holder.tv_fullname.setText(friend.getFullname());
-
+        holder.tv_fullname.setText(friend1.getFullname());
+//cần format
         holder.tv_createAt.setText(listPosts.get(position).getCreateAt());
 
         holder.tv_content.setText(listPosts.get(position).getContent());
         holder.tv_content.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+
         int line = holder.tv_content.getLineCount();
         if (line >= 3) {
             holder.tv_see_more.setVisibility(View.VISIBLE);
@@ -125,7 +129,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         if (listPosts.get(position).getImgLink() != "null") {
             holder.img_posts.setVisibility(View.VISIBLE);
             Glide.with(context).load(listPosts.get(position).getImgLink()).into(holder.img_posts);
+        }else {
+            holder.img_posts.setVisibility(View.GONE);
         }
+
         soLike = listPosts.get(position).getLike();
         holder.tv_so_like.setText(soLike + "");
 
@@ -138,8 +145,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         }
 
 
-        List<Comment> listCmtOfPosts = getAllCommentOfPosts(listPosts.get(position));
-        holder.tv_so_binh_luan.setText(listCmtOfPosts.size() + " Bình luận");
+        int countCmt= countComment(listPosts.get(position).getIdPosts());
+        holder.tv_so_binh_luan.setText(countCmt + " Bình luận");
 
         //like
         holder.click_to_like.setOnClickListener(new View.OnClickListener() {
@@ -151,8 +158,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     sqlHelper.deletePostLiked(listPosts.get(position).getIdPosts());
                     String likeCount = apiDisLike(listPosts.get(position).getIdPosts());
                     int sl = Integer.parseInt(holder.tv_so_like.getText().toString());
-//                    listPosts.get(position).setLike(Integer.parseInt(likeCount));
-//                    notifyItemChanged(position);
                     if (sl > 0)
                         holder.tv_so_like.setText(sl - 1 + "");
                 } else {
@@ -161,8 +166,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     sqlHelper.insertPostsLiked(listPosts.get(position).getIdPosts());
                     String likeCount = apiLike(listPosts.get(position).getIdPosts());
                     int sl = Integer.parseInt(holder.tv_so_like.getText().toString());
-//                    listPosts.get(position).setLike(Integer.parseInt(likeCount));
-//                    notifyItemChanged(position);
                     holder.tv_so_like.setText(sl + 1 + "");
                 }
                 //api like here
@@ -229,17 +232,18 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 dialog.setCancelable(true);
 
 
-                RecyclerView revComment = dialog.findViewById(R.id.revComment);
+                revComment = dialog.findViewById(R.id.revComment);
                 ImageView img_choose_img_to_cmt = dialog.findViewById(R.id.img_choose_img_to_cmt);
                 ImageView img_btn_send_cmt = dialog.findViewById(R.id.img_btn_send_cmt);
                 EditText edt_type_cmt = dialog.findViewById(R.id.edt_type_to_cmt);
 
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, RecyclerView.VERTICAL, false);
-                CommentAdapter commentAdapter = new CommentAdapter(listCmtOfPosts, context);
-                revComment.setLayoutManager(linearLayoutManager);
-                revComment.setAdapter(commentAdapter);
 
                 dialog.show();
+               //comment
+                List<Comment> l= getListCmtOfPosts(listPosts.get(position));
+                Toast.makeText(context, "list cmt: "+ l.toString(), Toast.LENGTH_SHORT).show();
+
+                //comment
 
 
                 img_choose_img_to_cmt.setOnClickListener(new View.OnClickListener() {
@@ -255,11 +259,61 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     }
                 });
 
-                Toast.makeText(context, "cmt", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "cmt", Toast.LENGTH_SHORT).show();
             }
+            public List<Comment> getListCmtOfPosts(Posts1 posts1){
+                List<Comment> listCmt= new ArrayList<>();
+                RequestQueue queue = Volley.newRequestQueue(getContext());
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url + "comment/posts/" + posts1.getIdPosts(), new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        resultCmt = response;
+                        try {
+                            JSONArray jsonArray = new JSONArray(resultCmt);
+                            int s = jsonArray.length();
+                            for (int i = 0; i < s; i++) {
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                int id = jsonObject.getInt("idCmt");
+                                String content = jsonObject.getString("content");
+                                String linkImgCmt = jsonObject.getString("linkImgCmt");
+                                String timeCmt = jsonObject.getString("timeCmt");
+                                String updateAt = jsonObject.getString("updateAt");
+                                JSONObject accountCmt = jsonObject.getJSONObject("account");
+                                Friend friend = convertOBToAccount(accountCmt);
+
+                                Comment comment = new Comment(id, content, linkImgCmt, timeCmt, updateAt, null, friend, posts1, null);
+                                listCmt.add(comment);
+                            }
+                            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+                            CommentAdapter commentAdapter = new CommentAdapter(listCmt, context);
+                            revComment.setLayoutManager(linearLayoutManager);
+                            revComment.setAdapter(commentAdapter);
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            System.out.println("lỗi tạo list comment");
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "get all comment fail", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                queue.add(stringRequest);
+                return listCmt;
+            }
+
+
         });
 
 
+
+    }
+
+    private int countComment(int idPosts) {
+        return 90;
     }
 
 
@@ -268,48 +322,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         return listPosts.size();
     }
 
-    private List<Comment> getAllCommentOfPosts(Posts1 posts1) {
-        List<Comment> listCmt = new ArrayList<>();
-        RequestQueue queue = Volley.newRequestQueue(getContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url + "comment/posts/" + posts1.getIdPosts(), new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                resultCmt = response;
-                try {
-                    JSONArray jsonArray = new JSONArray(resultCmt);
-                    int size = jsonArray.length();
-                    for (int i = 0; i < size; i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        int id = jsonObject.getInt("idCmt");
-                        String content = jsonObject.getString("content");
-                        String linkImgCmt = jsonObject.getString("linkImgCmt");
-                        String timeCmt = jsonObject.getString("timeCmt");
-                        String updateAt = jsonObject.getString("updateAt");
-                        JSONObject accountCmt = jsonObject.getJSONObject("account");
-                        Friend friend = convertOBToAccount(accountCmt);
-
-                        Comment comment = new Comment(id, content, linkImgCmt, timeCmt, updateAt, null, friend, posts1, null);
-                        listCmt.add(comment);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    System.out.println("lỗi tạo list comment");
-                }
-            }
 
 
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "get all comment fail", Toast.LENGTH_SHORT).show();
-            }
-        });
-        queue.add(stringRequest);
-        return listCmt;
-    }
 
 
-    private Friend convertOBToAccount(JSONObject accountCmt) {
+    public Friend convertOBToAccount(JSONObject accountCmt) {
         Friend friend = null;
         try {
             String id = accountCmt.getString("id");
@@ -323,6 +340,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             String creaetAt = accountCmt.getString("creaetAt");
             String updateAt = accountCmt.getString("updateAt");
             friend = new Friend(id, username, role, fullname, gender, status, linkAvt, email, creaetAt, updateAt);
+            return friend;
         } catch (JSONException e) {
             e.printStackTrace();
             System.out.println("lỗi convert account comment");
@@ -334,10 +352,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         ImageView img_avt, img_status, img_posts, img_like_click;
         TextView tv_fullname, tv_createAt, tv_content, tv_so_like, tv_so_binh_luan, tv_like_click, tv_see_more;
         LinearLayout click_to_like, click_to_cmt;
-
-        RecyclerView revComment;
-        ImageView img_choose_img_to_cmt, img_btn_send_cmt;
-        EditText edt_type_cmt;
 
 
         public ViewHolder(@NonNull @NotNull View itemView) {
@@ -359,11 +373,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
             tv_see_more = itemView.findViewById(R.id.tv_see_more);
 
-//            cmt
-//            revComment = itemView.findViewById(R.id.revComment);
-//            img_choose_img_to_cmt = itemView.findViewById(R.id.img_choose_img_to_cmt);
-//            img_btn_send_cmt = itemView.findViewById(R.id.img_btn_send_cmt);
-//            edt_type_cmt = itemView.findViewById(R.id.edt_type_to_cmt);
 
         }
     }

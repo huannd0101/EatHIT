@@ -1,8 +1,6 @@
 package com.example.eathit.ui.slideshow.Posts;
 
 import com.example.eathit.ui.slideshow.Friend;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
 public class Posts1 {
 
@@ -16,7 +14,7 @@ public class Posts1 {
 
     private String updateAt;
 
-    private int like ;
+    private int likes ;
 
     private Friend account;
 
@@ -26,7 +24,7 @@ public class Posts1 {
         this.imgLink = imgLink;
         this.creaetAt = createAt;
         this.updateAt = updateAt;
-        this.like = like;
+        this.likes = like;
         this.account= ac;
     }
 
@@ -87,11 +85,11 @@ public class Posts1 {
     }
 
     public int getLike() {
-        return like;
+        return likes;
     }
 
     public void setLike(int like) {
-        this.like = like;
+        this.likes = like;
     }
 
     public Posts1() {
