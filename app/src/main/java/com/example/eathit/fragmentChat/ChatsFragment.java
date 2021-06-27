@@ -67,6 +67,8 @@ public class ChatsFragment extends Fragment {
             @Override
             public void onResponse(@NotNull Call<List<RoomChat>> call, @NotNull Response<List<RoomChat>> response) {
                 roomChats = response.body();
+                Toast.makeText(getContext(), "Đây là currentId: " + currentUser.getUid(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), response.body().toString(), Toast.LENGTH_SHORT).show();
                 for(RoomChat roomChat : roomChats){
                     if(roomChat.getSender().equals(currentUser.getUid()) ||
                             roomChat.getReceiver().equals(currentUser.getUid())){

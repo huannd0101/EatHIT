@@ -39,6 +39,7 @@ import com.example.eathit.R;
 import com.example.eathit.databinding.FragmentSlideshowBinding;
 
 import com.example.eathit.ui.slideshow.Posts.Posts1;
+import com.example.eathit.ui.slideshow.Posts.PostsAdapter;
 
 import com.example.eathit.ui.slideshow.API.APIService;
 import com.example.eathit.ui.slideshow.Comment.Comment;

@@ -57,6 +57,11 @@ public class FirstSignupFragment extends Fragment {
             startActivity(intent);
         });
 
+        binding.btnLoginOfSignup.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+        });
+
         //chuyển sang second signup
         binding.btnNextToSecondSignUp.setOnClickListener(v -> {
             moveToSecondFragment();
@@ -68,7 +73,6 @@ public class FirstSignupFragment extends Fragment {
 
     private void moveToSecondFragment() {
         String fullName = Objects.requireNonNull(binding.edtFullName.getText()).toString().trim();
-        String userName = Objects.requireNonNull(binding.edtUsername.getText()).toString().trim();
         String email = Objects.requireNonNull(binding.edtEmail.getText()).toString().trim();
         String password = Objects.requireNonNull(binding.edtPassword.getText()).toString().trim();
         String passwordAgain = Objects.requireNonNull(binding.edtPasswordAgain.getText()).toString().trim();
@@ -76,12 +80,8 @@ public class FirstSignupFragment extends Fragment {
         if(fullName.isEmpty()){
             binding.tilFullName.setError("You have not entered fullName");
             return;
-        }else if(userName.isEmpty()){
-            binding.tilFullName.setError(null);
-            binding.tilUsername.setError("You have not entered username");
-            return;
         }else if(email.isEmpty()){
-            binding.tilUsername.setError(null);
+            binding.tilFullName.setError(null);
             binding.tilEmail.setError("You have not entered email");
             return;
         }else if(password.isEmpty()){
@@ -102,7 +102,6 @@ public class FirstSignupFragment extends Fragment {
         //send data to activity
         ArrayList<String> dataSignUp = new ArrayList<>();
         dataSignUp.add(fullName);
-        dataSignUp.add(userName);
         dataSignUp.add(email);
         dataSignUp.add(password);
         dataSignUp.add(passwordAgain);
@@ -138,7 +137,6 @@ public class FirstSignupFragment extends Fragment {
 
     private void initAnimate() {
         binding.tilFullName.setTranslationY(800);
-        binding.tilUsername.setTranslationY(800);
         binding.tilEmail.setTranslationY(800);
         binding.tilPassword.setTranslationY(800);
         binding.tilPasswordAgain.setTranslationY(800);
@@ -146,7 +144,6 @@ public class FirstSignupFragment extends Fragment {
         binding.btnLoginOfSignup.setTranslationY(800);
 
         binding.tilFullName.setAlpha(0);
-        binding.tilUsername.setAlpha(0);
         binding.tilEmail.setAlpha(0);
         binding.tilPassword.setAlpha(0);
         binding.tilPasswordAgain.setAlpha(0);
@@ -154,12 +151,11 @@ public class FirstSignupFragment extends Fragment {
         binding.btnLoginOfSignup.setAlpha(0);
 
         binding.tilFullName.animate().translationY(0).alpha(1).setDuration(1800).setStartDelay(600).start();
-        binding.tilUsername.animate().translationY(0).alpha(1).setDuration(1800).setStartDelay(800).start();
-        binding.tilEmail.animate().translationY(0).alpha(1).setDuration(1800).setStartDelay(1100).start();
-        binding.tilPassword.animate().translationY(0).alpha(1).setDuration(1800).setStartDelay(1300).start();
-        binding.tilPasswordAgain.animate().translationY(0).alpha(1).setDuration(1800).setStartDelay(1500).start();
-        binding.btnNextToSecondSignUp.animate().translationY(0).alpha(1).setDuration(1800).setStartDelay(1800).start();
-        binding.btnLoginOfSignup.animate().translationY(0).alpha(1).setDuration(1800).setStartDelay(2000).start();
+        binding.tilEmail.animate().translationY(0).alpha(1).setDuration(1800).setStartDelay(800).start();
+        binding.tilPassword.animate().translationY(0).alpha(1).setDuration(1800).setStartDelay(1100).start();
+        binding.tilPasswordAgain.animate().translationY(0).alpha(1).setDuration(1800).setStartDelay(1300).start();
+        binding.btnNextToSecondSignUp.animate().translationY(0).alpha(1).setDuration(1800).setStartDelay(1500).start();
+        binding.btnLoginOfSignup.animate().translationY(0).alpha(1).setDuration(1800).setStartDelay(1800).start();
 
         binding.titleCreateAccount.setTranslationX(-800);
         binding.titleCreateAccount.setAlpha(0);

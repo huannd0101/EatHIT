@@ -1,5 +1,6 @@
 package com.example.eathit.common.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 
 
 import com.example.eathit.R;
+import com.example.eathit.common.loginSignup.LoginActivity;
 import com.example.eathit.databinding.FragmentSecondSignupBinding;
 import com.example.eathit.utilities.Constants;
 
@@ -62,7 +64,10 @@ public class SecondSignupFragment extends Fragment {
         }
 
 
-
+        binding.btnLoginOfSignup.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+        });
 
 
 

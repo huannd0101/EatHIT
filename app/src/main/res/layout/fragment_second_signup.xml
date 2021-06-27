@@ -21,9 +21,10 @@
             android:src="@drawable/ic_baseline_arrow_back_24" />
 
         <RelativeLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/titleCreateAccount"
                 android:layout_width="200dp"
@@ -37,13 +38,13 @@
 
             <TextView
                 android:id="@+id/tvProcess"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:padding="35dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/twoPerAll"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
                 android:background="@drawable/black_border"
+                android:padding="35dp"
+                android:text="@string/twoPerAll"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
                 android:textSize="30sp"
@@ -58,10 +59,10 @@
 
             <RadioGroup
                 android:id="@+id/radioGender"
-                android:layout_gravity="center"
                 android:layout_width="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <RadioButton
@@ -71,11 +72,11 @@
                     android:text="@string/Male" />
 
                 <RadioButton
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
                     android:id="@+id/radioFemale"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:text="@string/Female" />
 
                 <RadioButton
@@ -90,27 +91,26 @@
                 android:id="@+id/viewView"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:background="@color/black"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginBottom="20dp"
+                android:background="@color/black" />
 
             <TextView
                 android:id="@+id/tvSelectDate"
-                android:text="@string/select_your_birthday"
-                android:textSize="18sp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:text="@string/select_your_birthday"
+                android:textSize="18sp" />
 
             <DatePicker
                 android:id="@+id/dpBirthday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:calendarTextColor="@color/white"
-                android:paddingBottom="20dp"
-                android:spinnersShown="true"
                 android:calendarViewShown="false"
                 android:datePickerMode="spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
+                android:paddingBottom="20dp"
+                android:spinnersShown="true" />
         </LinearLayout>
 
         <Button

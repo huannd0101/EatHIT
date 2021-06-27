@@ -161,6 +161,7 @@ public class ChatsDetailActivity extends AppCompatActivity {
 
         binding.backToMain.setOnClickListener(v -> {
             onBackPressed();
+            finish();
         });
 
     }
