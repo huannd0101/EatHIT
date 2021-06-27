@@ -12,19 +12,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.eathit.R;
-import com.example.eathit.modules.Person;
+import com.example.eathit.modules.Food;
+import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
 
-public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder> {
-    List<Person> list;
+public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
+    List<Food> list;
     Context context;
 
-    public PersonAdapter(List<Person> list, Context context) {
+    public FoodAdapter(List<Food> list, Context context) {
         this.list = list;
         this.context = context;
     }
@@ -33,16 +32,13 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
     @NotNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.item_peoples, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_food, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull ViewHolder holder, int position) {
-        String s = list.get(position).getFullName();
-        holder.textViewFullNamePerSon.setText(s);
-        Glide.with(context).load(list.get(position).getLinkAvatar()).into(holder.imageViewAvatarPerson);
+        holder.tvNameFood.setText(list.get(position).getNameFood());
+        holder.tvPriceFood.setText(list.get(position).getPriceFood()+"");
     }
 
     @Override
@@ -51,15 +47,12 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageViewAvatarPerson;
-        TextView textViewFullNamePerSon;
+        TextView tvPriceFood;
+        TextView tvNameFood;
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
-            imageViewAvatarPerson = itemView.findViewById(R.id.avatar_people);
-            textViewFullNamePerSon = itemView.findViewById(R.id.full_name_people);
+            tvPriceFood = itemView.findViewById(R.id.price_food);
+            tvNameFood = itemView.findViewById(R.id.name_food);
         }
     }
-
-
-
 }

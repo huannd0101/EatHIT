@@ -117,6 +117,13 @@ public class Main2Activity extends AppCompatActivity implements TextToSpeech.OnI
                 startActivity(intent);
             }
         });
+        findViewById(R.id.cvRandom).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Main2Activity.this, RandomActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
