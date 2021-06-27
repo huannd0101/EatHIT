@@ -23,6 +23,7 @@ import com.example.eathit.common.loginSignup.SignupActivity;
 import com.example.eathit.databinding.FragmentThirthSignupBinding;
 import com.example.eathit.modules.User;
 import com.example.eathit.utilities.Constants;
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -48,7 +49,8 @@ public class ThirdSignupFragment extends Fragment {
     private ArrayList<String> strings;
     private SignupActivity signupActivity;
     ProgressDialog progressDialog;
-
+    FirebaseAuth auth;
+    FirebaseUser user;
 
     public static ThirdSignupFragment newInstance(ArrayList<String> strings) {
         ThirdSignupFragment fragment = new ThirdSignupFragment();
@@ -71,7 +73,7 @@ public class ThirdSignupFragment extends Fragment {
         binding = FragmentThirthSignupBinding.inflate(inflater, container, false);
         //animation
         initAnimate();
-
+        auth = FirebaseAuth.getInstance();
 
 
         //progressDialog
@@ -120,7 +122,6 @@ public class ThirdSignupFragment extends Fragment {
             binding.tilPhoneNumber.setError(null);
         }
 
-
         RequestQueue requestQueue= Volley.newRequestQueue(requireContext());
         JSONObject jsonObject = new JSONObject();
         try {
@@ -142,37 +143,40 @@ public class ThirdSignupFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
 
+                        auth.createUserWithEmailAndPassword(strings.get(1), strings.get(2))
+                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
+                                        Toast.makeText(signupActivity, "Thành công ở firebase", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnCanceledListener(new OnCanceledListener() {
+                                    @Override
+                                    public void onCanceled() {
+
+                                    }
+                                });
+
                         startActivity(new Intent(getContext(), LoginActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     }
                 }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(signupActivity, "Create account failed", Toast.LENGTH_SHORT).show();
-                        progressDialog.dismiss();
-                    }
-                }) {
-                @Override
-                public String getBodyContentType() {
-                    return "application/json; charset = utf-8";
-                }
-
-                @Override
-                public byte[] getBody() throws AuthFailureError {
-                    if(stringBody == null){
-                        return null;
-                    }
-                    try {
-                        return stringBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
-                }
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(signupActivity, "Create account failed", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+        }) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset = utf-8";
+            }
         };
 
         requestQueue.add(stringRequest);
 
         signupActivity.setStrings(strings);
+
+
     }
 
     /*

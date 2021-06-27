@@ -40,7 +40,6 @@ import retrofit2.Response;
 
 public class ChatsDetailActivity extends AppCompatActivity {
     Socket mSocket;
-    List<ChatTest> chatTests;
     List<Message> messages;
     MessageAdapter adapter;
     ActivityChatsDetailBinding binding;
