@@ -87,6 +87,7 @@ public class InviteActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 String listBook = response;
+
                 try {
                     JSONArray jsonArray = new JSONArray(listBook);
                     for(int i = 0; i < jsonArray.length(); i++){

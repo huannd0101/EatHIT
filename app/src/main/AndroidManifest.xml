@@ -4,15 +4,10 @@
     package="com.example.eathit">
 
     <uses-permission android:name="android.permission.INTERNET " />
-
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
-
-
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.VIBRATE" />
-
 
     <application
         android:name=".application.SocketApplication"
@@ -24,7 +19,8 @@
         android:theme="@style/Theme.EatHIT"
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
-        <activity android:name=".activities.InviteActivity"></activity>
+        <activity android:name=".activities.RandomActivity"></activity>
+        <activity android:name=".activities.InviteActivity" />
         <activity android:name=".activities.ConnectActivity" />
         <activity android:name=".activities.OnBoardingActivity">
             <intent-filter>
@@ -63,6 +59,7 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+
         <service
             android:name=".notification.FirebaseMessagingService"
             android:permission="TODO"
