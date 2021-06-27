@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 
@@ -72,6 +73,7 @@ public class ThirdSignupFragment extends Fragment {
         initAnimate();
 
 
+
         //progressDialog
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setTitle("Creating account");
@@ -98,7 +100,10 @@ public class ThirdSignupFragment extends Fragment {
         });
 
 
-
+        binding.btnLogin.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), LoginActivity.class);
+            startActivity(intent);
+        });
 
 
 
@@ -120,11 +125,11 @@ public class ThirdSignupFragment extends Fragment {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("username", strings.get(1));
-            jsonObject.put("password", strings.get(3));
+            jsonObject.put("password", strings.get(2));
             jsonObject.put("role", "");
             jsonObject.put("fullname", strings.get(0));
-            jsonObject.put("gender", strings.get(5));
-            jsonObject.put("email", strings.get(2));
+            jsonObject.put("gender", strings.get(4));
+            jsonObject.put("email", strings.get(1));
         }catch (JSONException e){
             e.printStackTrace();
         }

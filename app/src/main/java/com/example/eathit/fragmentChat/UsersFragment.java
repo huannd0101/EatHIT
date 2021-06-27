@@ -12,6 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.eathit.activities.ChatActivity;
 import com.example.eathit.activities.ChatsDetailActivity;
 import com.example.eathit.activities.Main2Activity;
@@ -33,6 +38,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,9 +81,7 @@ public class UsersFragment extends Fragment {
         currentUser = auth.getCurrentUser();
         users = new ArrayList<>();
         isHaveRoom = new ArrayList<>();
-        Toast.makeText(getContext(), "1", Toast.LENGTH_SHORT).show();
         getListUser();
-        Toast.makeText(getContext(), "2", Toast.LENGTH_SHORT).show();
         linearLayoutManager = new LinearLayoutManager(getContext());
 
 
@@ -176,30 +182,63 @@ public class UsersFragment extends Fragment {
 
 
     private void getListUser() {
-        database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                users.clear();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    User user = dataSnapshot.getValue(User.class);
-                    if (user != null) {
-                        user.setUserId(dataSnapshot.getKey());
+        users.clear();
+        RequestQueue requestQueue = Volley.newRequestQueue(requireContext());
+        String url = "https://btl-spring-boot.herokuapp.com/api/accounts/";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                response -> {
+                    Toast.makeText(getContext(), response, Toast.LENGTH_SHORT).show();
 
-                        //loại bỏ current user from list
-                        if (user.getUserId().equals(FirebaseAuth.getInstance().getUid()))
-                            continue;
-                        users.add(user);
-                        isHaveRoom.add(false);
+                    try {
+                        JSONArray jsonArray = new JSONArray(response);
+                        for(int i=0; i<jsonArray.length(); i++){
+                            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                            if(jsonObject.get("id").equals(FirebaseAuth.getInstance().getUid())) {
+                                continue;
+                            }
+                            User u = new User(
+                                    currentUser.getUid(),
+                                    jsonObject.getString("fullname"),
+                                    jsonObject.getString("linkAvt"),
+                                    "isOnline"
+                            );
+                            users.add(u);
+                            isHaveRoom.add(false);
+                        }
+                        adapter.notifyDataSetChanged();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                }
-                adapter.notifyDataSetChanged();
-                Toast.makeText(getContext(), "12312312", Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+                }, error -> {
+            Toast.makeText(getContext(), "Call users error", Toast.LENGTH_SHORT).show();
         });
+        requestQueue.add(stringRequest);
+
+//        database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                users.clear();
+//                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                    User user = dataSnapshot.getValue(User.class);
+//                    if (user != null) {
+//                        user.setUserId(dataSnapshot.getKey());
+//
+//                        //loại bỏ current user from list
+//                        if (user.getUserId().equals(FirebaseAuth.getInstance().getUid()))
+//                            continue;
+//                        users.add(user);
+//                        isHaveRoom.add(false);
+//                    }
+//                }
+//                adapter.notifyDataSetChanged();
+//                Toast.makeText(getContext(), "12312312", Toast.LENGTH_SHORT).show();
+//            }
+
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
     }
 }
