@@ -19,7 +19,7 @@
         app:navGraph="@navigation/mobile_navigation" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:background="@color/origin"
+        android:background="@color/white"
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"
         app:menu="@menu/activity_main2_drawer"

@@ -19,4 +19,9 @@
     <string name="action_settings">Cài đặt</string>
     <string name="create_account">Tạo tài khoản</string>
     <string name="enter_full_name">Họ và tên</string>
+    <string name="tittle_select_friend">Bạn muốn mời ai?</string>
+    <string name="tittle_select_options">Lựa chọn</string>
+    <string name="menu_notification">Thông báo</string>
+    <string name="menu_message">Tin nhắn</string>
+    <string name="send_invitation">Gửi lời mời</string>
 </resources>

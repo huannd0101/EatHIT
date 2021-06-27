@@ -8,10 +8,10 @@
 
     <EditText
         android:layout_margin="5dp"
-        android:background="@drawable/custom_edt_search_user"
+        android:background="@drawable/rectangle_3"
         android:padding="12dp"
         android:drawableStart="@drawable/ic_baseline_search_24"
-        android:hint="Huân Đẹp Trai"
+        android:hint="Search"
         android:id="@+id/edtSearchUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
