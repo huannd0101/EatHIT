@@ -8,6 +8,7 @@
         android:layout_margin="5dp"
         android:padding="5dp"
         android:id="@+id/revComment"
+        android:layoutAnimation="@anim/layout_left_to_right"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/bg_rev_cmt"
