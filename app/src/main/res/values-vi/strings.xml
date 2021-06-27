@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">EatHIT</string>
+    <string name="app_name">EatNow</string>
     <string name="logout">Đăng xuất</string>
     <string name="action_chats">Nhắn tin</string>
     <string name="action_helps">Hỗ trợ</string>
@@ -23,5 +23,8 @@
     <string name="tittle_select_options">Lựa chọn</string>
     <string name="menu_notification">Thông báo</string>
     <string name="menu_message">Tin nhắn</string>
-    <string name="send_invitation">Gửi lời mời</string>
+    <string name="send_invitation1">Gửi lời mời </string>
+    <string name="send_invitation2">Gửi lời mời (2/2)</string>
+    <string name="enter_code">  Nhập mã kết nối</string>
+    <string name="result_connect">Kết quả kết nối</string>
 </resources>

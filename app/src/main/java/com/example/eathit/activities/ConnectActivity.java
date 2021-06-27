@@ -6,6 +6,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -30,7 +33,10 @@ public class ConnectActivity extends AppCompatActivity {
     private static final String url = "https://btl-spring-boot.herokuapp.com/api/accounts/";
     private static RecyclerView recyclerView;
     private static PersonAdapter personAdapter;
-    private static List<Person> list;
+    private static List<Person> list = new ArrayList<>();
+    private static List<Person> listConnect = new ArrayList<>();;
+    EditText edtGetCodeConnect;
+    Button btnConnect;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,32 +44,42 @@ public class ConnectActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         
         recyclerView = findViewById(R.id.recycleViewListPeople);
-        list = new ArrayList<>();
-        personAdapter = new PersonAdapter(list, ConnectActivity.this);
 
+        personAdapter = new PersonAdapter(listConnect, ConnectActivity.this);
+        edtGetCodeConnect = findViewById(R.id.editTextEnterCode);
+        btnConnect = findViewById(R.id.buttonConnect);
         RequestQueue requestQueue = Volley.newRequestQueue(ConnectActivity.this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 String listBook = response;
-                try {
-                    JSONArray jsonArray = new JSONArray(listBook);
-                    for(int i = 0; i < jsonArray.length(); i++){
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String FullName = jsonObject.getString("fullname");
-                        String LinkAvatar = jsonObject.getString("linkAvt");
-
-                        list.add(new Person(FullName, LinkAvatar));
-                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ConnectActivity.this, RecyclerView.VERTICAL, false);
-                        recyclerView.setLayoutManager(linearLayoutManager);
-                        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(ConnectActivity.this, linearLayoutManager.getOrientation());
-                        recyclerView.addItemDecoration(dividerItemDecoration);
-                        recyclerView.setAdapter(personAdapter);
+                btnConnect.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            JSONArray jsonArray = new JSONArray(listBook);
+                            for(int i = 0; i < jsonArray.length(); i++){
+                                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                                String FullName = jsonObject.getString("fullname");
+                                String LinkAvatar = jsonObject.getString("linkAvt");
+                                String idUser = jsonObject.getString("id");
+                                list.add(new Person(FullName, LinkAvatar));
+                                if(idUser.compareToIgnoreCase(edtGetCodeConnect.getText().toString()) == 0)
+                                {
+                                    listConnect.add(new Person(list.get(i).getFullName(), list.get(i).getLinkAvatar()));
+                                }
+                                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ConnectActivity.this, RecyclerView.VERTICAL, false);
+                                recyclerView.setLayoutManager(linearLayoutManager);
+                                //DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(ConnectActivity.this, linearLayoutManager.getOrientation());
+                                //recyclerView.addItemDecoration(dividerItemDecoration);
+                                recyclerView.setAdapter(personAdapter);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Toast.makeText(ConnectActivity.this, "Cập nhật dữ liệu thành công", Toast.LENGTH_SHORT).show();
+                });
+                Toast.makeText(ConnectActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -71,6 +87,13 @@ public class ConnectActivity extends AppCompatActivity {
                 Toast.makeText(ConnectActivity.this, "Lỗi cập nhật dữ liệu", Toast.LENGTH_LONG).show();
             }
         });
+//        for(int i = 0; i < list.size();i++)
+//        {
+//            if(list.get(i).getId().compareToIgnoreCase(edtGetCodeConnect.getText().toString()) == 0)
+//            {
+//                listConnect.add(new Person(list.get(i).getFullName(), list.get(i).getLinkAvatar()));
+//            }
+//        }
         requestQueue.add(stringRequest);
     }
 }

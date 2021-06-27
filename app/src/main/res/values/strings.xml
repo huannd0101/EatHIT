@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EatHIT</string>
+    <string name="app_name">EatNow</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
     <string name="nav_header_title" translatable="false">Android Studio</string>
@@ -40,10 +40,12 @@
     <string name="qr_code" translatable="false">QR Code</string>
     <string name="tittle_select_friend">Select friends to invite</string>
     <string name="tittle_select_options">Enter your favorite</string>
-    <string name="send_invitation">Send your invitation</string>
+    <string name="send_invitation1">Send your invitation</string>
+    <string name="send_invitation2">Send your invitation (2/2)</string>
     <string name="facebook_app_id" translatable="false">510387363336471</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb510387363336471</string>
     <string name="menu_notification">Notification</string>
     <string name="menu_message">Message</string>
-
+    <string name="enter_code">Enter your friend code</string>
+    <string name="result_connect">Result connect</string>
 </resources>
