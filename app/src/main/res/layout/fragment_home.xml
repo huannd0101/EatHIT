@@ -112,7 +112,7 @@
                 android:id="@+id/cvInvite"
                 android:layout_width="160dp"
                 android:layout_height="170dp"
-                app:cardCornerRadius="40dp">
+                app:cardCornerRadius="10dp">
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -124,8 +124,9 @@
                 android:layout_height="170dp"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@+id/cvInvite"
-                app:cardCornerRadius="40dp">
+                app:cardCornerRadius="10dp">
                 <ImageView
+                    android:id="@+id/buttonMenuConnect"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/img_connect" />

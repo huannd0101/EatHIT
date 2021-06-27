@@ -9,6 +9,7 @@ import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.view.MenuItem;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ import com.squareup.picasso.Picasso;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.cardview.widget.CardView;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -100,6 +102,21 @@ public class Main2Activity extends AppCompatActivity implements TextToSpeech.OnI
         ImageView imageView = navigationView.getHeaderView(0).findViewById(R.id.imgImageUser);
         Picasso.get().load(user.getPhotoUrl()).placeholder(R.drawable.ic_baseline_person_24).into(imageView);
 
+
+        findViewById(R.id.imgMenuConnect).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Main2Activity.this, ConnectActivity.class);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.cvInvite).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Main2Activity.this, InviteActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 

@@ -38,8 +38,9 @@
     <string name="action_chats">Chat</string>
     <string name="logout">Logout</string>
     <string name="qr_code" translatable="false">QR Code</string>
-
-
+    <string name="tittle_select_friend">Select friends to invite</string>
+    <string name="tittle_select_options">Enter your favorite</string>
+    <string name="send_invitation">Send your invitation</string>
     <string name="facebook_app_id" translatable="false">510387363336471</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb510387363336471</string>
     <string name="menu_notification">Notification</string>

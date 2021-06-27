@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rlt1"
                 android:layout_marginStart="15dp"
-                android:text="Welcome Nguyễn Đình Huân!"
+                android:text="Welcome "
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -130,6 +130,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/imgMenuConnect"
                 android:layout_width="160dp"
                 android:layout_height="170dp"
                 android:layout_marginLeft="20dp"
