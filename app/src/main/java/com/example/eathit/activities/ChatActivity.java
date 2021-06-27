@@ -28,7 +28,6 @@ public class ChatActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
 
         //set up tablayout1
-        
         binding.viewPager.setAdapter(new FragmentChatAdapter(getSupportFragmentManager()));
         binding.tabLayout.setupWithViewPager(binding.viewPager);
     }

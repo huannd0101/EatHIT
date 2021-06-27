@@ -15,6 +15,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.eathit.R;
 import com.example.eathit.activities.ConnectActivity;
 import com.example.eathit.activities.Main2Activity;
@@ -41,6 +48,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Objects;
@@ -53,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     FirebaseAuth auth = FirebaseAuth.getInstance();
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-
+    FirebaseUser user;
     //sign up with google
     GoogleSignInClient mGoogleSignInClient;
     CallbackManager callbackManager;
@@ -201,12 +209,42 @@ public class LoginActivity extends AppCompatActivity {
                         progressDialog.dismiss();
 
                         if (task.isSuccessful()) {
+
+                            user = auth.getCurrentUser();
+                            String newId = "";
+                            if(user != null){
+                                newId = user.getUid();
+                            }
+                            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                            StringRequest stringRequest2 = new StringRequest(Request.Method.PATCH,
+                                    "https://btl-spring-boot.herokuapp.com/api/accounts/updateId/" + username + "/" + newId,
+                                    new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+
+                                        }
+                                    }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                            }){
+                                @Override
+                                public String getBodyContentType() {
+                                    return "application/json; charset = utf-8";
+                                }
+                            };
+                            queue.add(stringRequest2);
+
+
                             Intent intent = new Intent(LoginActivity.this, Main2Activity.class);
                             startActivity(intent);
                         } else {
                             Toast.makeText(LoginActivity.this, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
+
+
         });
 
         //ktra nếu đã đăng nhập rồi thì chuyển đến main activity

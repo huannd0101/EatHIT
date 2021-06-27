@@ -86,14 +86,15 @@ public class UsersFragment extends Fragment {
 
 
         adapter = new UsersAdapter(users, getContext(), (user, socket, position) -> {
-            Toast.makeText(getContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+
             Intent intent = new Intent(getContext(),  ChatsDetailActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             if(!isHaveRoom.get(position)){
                 RoomChatDTO roomChatDTO = new RoomChatDTO(currentUser.getUid(), user.getUserId());
                 ApiServices.apiServices.postNewRoomChat(roomChatDTO).enqueue(new Callback<RoomChat>() {
                     @Override
-                    public void onResponse(Call<RoomChat> call, Response<RoomChat> response) {
+                    public void onResponse(@NotNull Call<RoomChat> call, @NotNull Response<RoomChat> response) {
 
+                        assert response.body() != null;
                         int roomId = response.body().getId();
 
                         intent.putExtra("userId", user.getUserId());
@@ -108,7 +109,7 @@ public class UsersFragment extends Fragment {
                     }
 
                     @Override
-                    public void onFailure(Call<RoomChat> call, Throwable t) {
+                    public void onFailure(@NotNull Call<RoomChat> call, @NotNull Throwable t) {
 
                     }
                 });
@@ -143,7 +144,7 @@ public class UsersFragment extends Fragment {
 
         ApiServices.apiServices.getRoomChats().enqueue(new Callback<List<RoomChat>>() {
             @Override
-            public void onResponse(Call<List<RoomChat>> call, Response<List<RoomChat>> response) {
+            public void onResponse(@NotNull Call<List<RoomChat>> call, @NotNull Response<List<RoomChat>> response) {
                 roomChats.clear();
                 roomChats = response.body();
                 for (int i = 0; i < Objects.requireNonNull(roomChats).size(); i++) {
@@ -155,11 +156,10 @@ public class UsersFragment extends Fragment {
                         }
                     }
                 }
-                Toast.makeText(getContext(), "Huân", Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onFailure(Call<List<RoomChat>> call, Throwable t) {
+            public void onFailure(@NotNull Call<List<RoomChat>> call, @NotNull Throwable t) {
 
             }
         });
@@ -173,8 +173,6 @@ public class UsersFragment extends Fragment {
 
         binding.rclAllUsers.setLayoutManager(linearLayoutManager);
         binding.rclAllUsers.setAdapter(adapter);
-
-
 
 
         return binding.getRoot();
@@ -193,11 +191,11 @@ public class UsersFragment extends Fragment {
                         JSONArray jsonArray = new JSONArray(response);
                         for(int i=0; i<jsonArray.length(); i++){
                             JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                            if(jsonObject.get("id").equals(FirebaseAuth.getInstance().getUid())) {
+                            if(jsonObject.get("idNew").equals(FirebaseAuth.getInstance().getUid())) {
                                 continue;
                             }
                             User u = new User(
-                                    currentUser.getUid(),
+                                    jsonObject.getString("idNew"),
                                     jsonObject.getString("fullname"),
                                     jsonObject.getString("linkAvt"),
                                     "isOnline"
@@ -214,31 +212,5 @@ public class UsersFragment extends Fragment {
             Toast.makeText(getContext(), "Call users error", Toast.LENGTH_SHORT).show();
         });
         requestQueue.add(stringRequest);
-
-//        database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                users.clear();
-//                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-//                    User user = dataSnapshot.getValue(User.class);
-//                    if (user != null) {
-//                        user.setUserId(dataSnapshot.getKey());
-//
-//                        //loại bỏ current user from list
-//                        if (user.getUserId().equals(FirebaseAuth.getInstance().getUid()))
-//                            continue;
-//                        users.add(user);
-//                        isHaveRoom.add(false);
-//                    }
-//                }
-//                adapter.notifyDataSetChanged();
-//                Toast.makeText(getContext(), "12312312", Toast.LENGTH_SHORT).show();
-//            }
-
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
     }
 }

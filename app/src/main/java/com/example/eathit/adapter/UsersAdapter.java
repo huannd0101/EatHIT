@@ -37,12 +37,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
     boolean isOnline;
-    String userId;
+
     List<User> list;
     Context context;
     Socket mSocket;
     String theLastMessage = "";
-    FirebaseAuth auth;
     IOnClickUser iOnClickUser;
 
     public UsersAdapter(List<User> list, Context context, IOnClickUser iOnClickUser, boolean isOnline) {
@@ -65,10 +64,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
         User users = list.get(position);
         Picasso.get().load(users.getProfilePic()).placeholder(R.drawable.ic_baseline_person_24).into(holder.image);
         holder.username.setText(users.getFullName());
-
-        String uid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-
-
 
 //        holder.lastMessage.setText(users.getLastMessage());
 

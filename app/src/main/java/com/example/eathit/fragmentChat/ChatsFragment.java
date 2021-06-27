@@ -13,6 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.eathit.activities.ChatsDetailActivity;
 import com.example.eathit.activities.Main2Activity;
 import com.example.eathit.adapter.UsersAdapter;
@@ -31,10 +36,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import retrofit2.Call;
@@ -68,7 +77,7 @@ public class ChatsFragment extends Fragment {
             public void onResponse(@NotNull Call<List<RoomChat>> call, @NotNull Response<List<RoomChat>> response) {
                 roomChats = response.body();
                 Toast.makeText(getContext(), "Đây là currentId: " + currentUser.getUid(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(getContext(), response.body().toString(), Toast.LENGTH_SHORT).show();
+
                 for(RoomChat roomChat : roomChats){
                     if(roomChat.getSender().equals(currentUser.getUid()) ||
                             roomChat.getReceiver().equals(currentUser.getUid())){
@@ -148,47 +157,100 @@ public class ChatsFragment extends Fragment {
 
 
     private void getListUser(){
-        database = FirebaseDatabase.getInstance();
-        database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+        String url = "https://btl-spring-boot.herokuapp.com/api/accounts/";
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(getContext(), "đây là api\n"+ response, Toast.LENGTH_SHORT).show();
+                        try {
+                            JSONArray array = new JSONArray(response);
 
-                Set<String> set = new HashSet<>();
-                for(RoomChat roomChat : roomChats){
-                    set.add(roomChat.getSender());
-                    set.add(roomChat.getReceiver());
-                }
+                            Set<String> set = new HashSet<>();
+                            for(RoomChat roomChat : roomChats){
+                                set.add(roomChat.getSender());
+                                set.add(roomChat.getReceiver());
+                            }
 
-                users.clear();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    User user = dataSnapshot.getValue(User.class);
-                    if (user != null) {
-                        user.setUserId(dataSnapshot.getKey());
-
-                        //loại bỏ current user from list
-                        if (user.getUserId().equals(FirebaseAuth.getInstance().getUid()))
-                            continue;
-
-                        //loại bỏ những ai chưa chat
-                        for(String s : set){
-                            for(String listUserId2 : listUserId){
-                                if(listUserId2.equals(s)){
-                                    if(user.getUserId().equals(listUserId2)){
-                                        users.add(user);
+                            users.clear();
+                            for(int i=0; i<array.length(); i++){
+                                JSONObject jsonObject = (JSONObject) array.get(i);
+                                //loại bỏ currentUser
+//                                if(currentUser.getUid().equals(jsonObject.getString("id"))){
+//                                    continue;
+//                                }
+                                //loại bỏ những ai chưa chat
+                                for(String s : set) {
+                                    for(String listUserId2 : listUserId){
+                                        if(listUserId2.equals(s)){
+                                            if(jsonObject.getString("idNew").equals(listUserId2)){
+                                                User user = new User(
+                                                        jsonObject.getString("idNew"),
+                                                        jsonObject.getString("fullname"),
+                                                        jsonObject.getString("linkAvt"),
+                                                        "isOnline"
+                                                );
+                                                users.add(user);
+                                            }
+                                        }
                                     }
                                 }
                             }
-                        }
-                    }
-                }
-                adapter.notifyDataSetChanged();
-            }
 
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onErrorResponse(VolleyError error) {
 
             }
         });
+        queue.add(stringRequest);
+//        database = FirebaseDatabase.getInstance();
+//        database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//
+//                Set<String> set = new HashSet<>();
+//                for(RoomChat roomChat : roomChats){
+//                    set.add(roomChat.getSender());
+//                    set.add(roomChat.getReceiver());
+//                }
+//
+//                users.clear();
+//                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                    User user = dataSnapshot.getValue(User.class);
+//                    if (user != null) {
+//                        user.setUserId(dataSnapshot.getKey());
+//
+//                        //loại bỏ current user from list
+//                        if (user.getUserId().equals(FirebaseAuth.getInstance().getUid()))
+//                            continue;
+//
+//                        //loại bỏ những ai chưa chat
+//                        for(String s : set){
+//                            for(String listUserId2 : listUserId){
+//                                if(listUserId2.equals(s)){
+//                                    if(user.getUserId().equals(listUserId2)){
+//                                        users.add(user);
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//                adapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
     }
 
     @Override
