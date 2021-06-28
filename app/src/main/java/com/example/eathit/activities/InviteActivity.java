@@ -57,6 +57,7 @@ public class InviteActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         String nameOfMe = user.getDisplayName();
+
         //callPeopleToInvite();
 
 
@@ -109,7 +110,14 @@ public class InviteActivity extends AppCompatActivity {
         btnSendInvitation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    String tittleNotification = nameOfMe + " bạn ơiii";
+                    String tittleNotification;
+                    if(getPlaceToInvite().matches(""))
+                    {
+                        tittleNotification = nameOfMe + " Aloo bạn ơi";
+                    }else{
+                        tittleNotification = nameOfMe+   " bạn ơiii, ra " + getPlaceToInvite() + " ngay đi";
+                    }
+
                     String messageNotification = randomMessage(getFoodToInvite());
                     FcmNotificationsSender fcmNotificationsSender = new FcmNotificationsSender("/topics/all", tittleNotification, messageNotification, getApplicationContext(), InviteActivity.this);
                     fcmNotificationsSender.SendNotifications();
@@ -137,13 +145,9 @@ public class InviteActivity extends AppCompatActivity {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         String FullName = jsonObject.getString("fullname");
                         String LinkAvatar = jsonObject.getString("linkAvt");
-                        //    FullName =
-
                         list.add(new Person(FullName, LinkAvatar));
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(InviteActivity.this, RecyclerView.VERTICAL, false);
                         recyclerView.setLayoutManager(linearLayoutManager);
-//                        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(InviteActivity.this, linearLayoutManager.getOrientation());
-//                        recyclerView.addItemDecoration(dividerItemDecoration);
                         recyclerView.setAdapter(personAdapter);
                     }
                 } catch (JSONException e) {
@@ -165,16 +169,24 @@ public class InviteActivity extends AppCompatActivity {
         EditText food = findViewById(R.id.editTextOption);
         return food.getText().toString();
     }
-
+// Cơm rang dưa bò
+    public String getPlaceToInvite()
+    {
+        EditText place = findViewById(R.id.editTextPlace);
+        return  place.getText().toString();
+    }
     public String randomMessage(String food)
     {
         List<String> messageInvite = new ArrayList<>();
         messageInvite.add("Bạn có muốn đi ăn " + food + " không nào? Nhanh nhanh nhá");
         messageInvite.add("Có người bao bạn đi chén " + food + " đây này, chả nhẽ lại không đi???");
+        messageInvite.add("Gọi bạn là Sliver, vì lúc nào tôi cũng muốn được Bạc đãi món " + food + " ahihi");
         messageInvite.add("Làm tí " + food + " không tình yêu ơiiiii");
+        messageInvite.add("Gọi bạn là Sliver, vì lúc nào tôi cũng muốn được Bạc đãi món " + food + " ahihi");
         messageInvite.add("Có thực mới vực được đạo, " + food + " là sự lựa chọn không tồi chứ? Đi thôi");
         messageInvite.add("Đang đói, muốn chén " + food + " nên nhắn bạn đấy thần tài ạ, đi luôn thôi nào");
-        messageInvite.add("It can be a bug but I LOVE YOU, would you like some " + food);
+        messageInvite.add("Ước gì được mời câu bữa " + food + " nhỉ ahihi");
+        messageInvite.add("Gọi bạn là Sliver, vì lúc nào tôi cũng muốn được Bạc đãi món " + food + " ahihi");
         Random rand = new Random();
         int randomNum = rand.nextInt((messageInvite.size() - 0) + 1) + 0;
         return messageInvite.get(randomNum);
