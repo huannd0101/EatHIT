@@ -287,13 +287,13 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 img_choose_img_to_cmt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //chose image
-                        Toast.makeText(getContext(), "choose image", Toast.LENGTH_SHORT).show();
-                        try {
-                            iOnClickPosts.IOnClickImage(listPosts.get(position));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+//                        //chose image
+//                        Toast.makeText(getContext(), "choose image", Toast.LENGTH_SHORT).show();
+//                        try {
+//                            iOnClickPosts.IOnClickImage(listPosts.get(position));
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
                     }
                 });
                 img_btn_send_cmt.setOnClickListener(new View.OnClickListener() {

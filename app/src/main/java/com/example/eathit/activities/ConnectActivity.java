@@ -39,6 +39,7 @@ public class ConnectActivity extends AppCompatActivity {
     private static List<Person> listConnect = new ArrayList<>();;
     EditText edtGetCodeConnect;
     Button btnConnect;
+    int countClick = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +56,7 @@ public class ConnectActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 String listBook = response;
+
                 btnConnect.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -79,7 +81,8 @@ public class ConnectActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        ConfirmedConnect(listConnect.get(0).getFullName(), 0);
+                        countClick = countClick+1;
+                        ConfirmedConnect(listConnect.get(countClick).getFullName(), 0);
 
 
                     }
