@@ -42,6 +42,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.eathit.R;
 import com.example.eathit.databinding.FragmentSlideshowBinding;
 import com.example.eathit.ui.slideshow.API.APIService;
@@ -168,13 +169,17 @@ public class SlideshowFragment extends Fragment {
                 LinearLayout progress_Postsing = dialog.findViewById(R.id.progress_postsing);
                 TextView tv_loadding = dialog.findViewById(R.id.tv_Loading);
                 img_choose_img_to_Post = dialog.findViewById(R.id.img_choose_img_to_post);
+//                if(user.getPhotoURL() !=null)
+//                {
+//                    try {
+//                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), user.getPhotoUrl());
+//                        img_avt_createP.setImageBitmap(bitmap);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+                Glide.with(getContext()).load(user.getPhotoUrl()).into(img_avt_createP);
 
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), user.getPhotoUrl());
-                    img_avt_createP.setImageBitmap(bitmap);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 tv_fullname_createP.setText(user.getDisplayName() + "");
 
 
@@ -397,94 +402,94 @@ public class SlideshowFragment extends Fragment {
                             Toast.makeText(getContext(), "gửi lên thôi, dễ quá ", Toast.LENGTH_SHORT).show();
 
                             if (realPath != null) {
-                                RequestBody requestContentP = RequestBody.create(MediaType.parse("multipart/form-data"), cont);
-
-                                File file = new File(realPath);
-
-                                RequestBody requestBodyAvt = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                                MultipartBody.Part multipartBodyAvt = MultipartBody.Part.createFormData("img", file.getName(), requestBodyAvt);
-
-                                APIService.apiService.createCmt_Posts_Img(idAccLogining, posts1.getIdPosts(), requestContentP, multipartBodyAvt).enqueue(new Callback<Comment>() {
-                                    @Override
-                                    public void onResponse(Call<Comment> call, retrofit2.Response<Comment> response) {
-                                        Toast.makeText(getContext(), "cmt succes", Toast.LENGTH_SHORT).show();
-                                        List<Comment> list = getListCmtOfPosts(posts1);
-                                    }
-                                    public List<Comment> getListCmtOfPosts(Posts1 posts1) {
-                                        List<Comment> listCmt = new ArrayList<>();
-                                        RequestQueue queue = Volley.newRequestQueue(getContext());
-                                        StringRequest stringRequest = new StringRequest(Request.Method.GET, url + "comment/posts/" + posts1.getIdPosts(), new Response.Listener<String>() {
-                                            @Override
-                                            public void onResponse(String response) {
-                                                resultCmt = response;
-                                                try {
-                                                    JSONArray jsonArray = new JSONArray(resultCmt);
-                                                    int s = jsonArray.length();
-                                                    for (int i = 0; i < s; i++) {
-                                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                                        int id = jsonObject.getInt("idCmt");
-                                                        String content = jsonObject.getString("content");
-                                                        String linkImgCmt = jsonObject.getString("linkImgCmt");
-                                                        String timeCmt = jsonObject.getString("timeCmt");
-                                                        String updateAt = jsonObject.getString("updateAt");
-                                                        JSONObject accountCmt = jsonObject.getJSONObject("account");
-                                                        Friend friend = convertOBToAccount(accountCmt);
-
-                                                        Comment comment = new Comment(id, content, linkImgCmt, timeCmt, updateAt, null, friend, posts1, null);
-                                                        listCmt.add(comment);
-                                                    }
-                                                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-                                                    CommentAdapter commentAdapter = new CommentAdapter(listCmt, getContext());
-                                                    revComment.setLayoutManager(linearLayoutManager);
-                                                    revComment.setAdapter(commentAdapter);
-
-
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                    System.out.println("lỗi tạo list comment");
-                                                }
-                                            }
-
-                                            private Friend convertOBToAccount(JSONObject accountCmt) {
-                                                Friend friend = null;
-                                                try {
-                                                    String id = accountCmt.getString("id");
-                                                    String username = accountCmt.getString("username");
-                                                    String role = accountCmt.getString("role");
-                                                    String fullname = accountCmt.getString("fullname");
-                                                    String gender = accountCmt.getString("gender");
-                                                    boolean status = accountCmt.getBoolean("status");
-                                                    String linkAvt = accountCmt.getString("linkAvt");
-                                                    String email = accountCmt.getString("email");
-                                                    String creaetAt = accountCmt.getString("creaetAt");
-                                                    String updateAt = accountCmt.getString("updateAt");
-                                                    friend = new Friend(id, username, role, fullname, gender, status, linkAvt, email, creaetAt, updateAt);
-                                                    return friend;
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
-                                                    System.out.println("lỗi convert account comment");
-                                                }
-                                                return friend;
-                                            }
-                                        }, new Response.ErrorListener() {
-                                            @Override
-                                            public void onErrorResponse(VolleyError error) {
-                                                Toast.makeText(getContext(), "get all comment fail", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                        queue.add(stringRequest);
-                                        return listCmt;
-                                    }
-
-
-
-
-                                    @Override
-                                    public void onFailure(Call<Comment> call, Throwable t) {
-                                        Toast.makeText(getContext(), "cmt fails", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                realPath=null;
+//                                RequestBody requestContentP = RequestBody.create(MediaType.parse("multipart/form-data"), cont);
+//
+//                                File file = new File(realPath);
+//
+//                                RequestBody requestBodyAvt = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+//                                MultipartBody.Part multipartBodyAvt = MultipartBody.Part.createFormData("img", file.getName(), requestBodyAvt);
+//
+//                                APIService.apiService.createCmt_Posts_Img(idAccLogining, posts1.getIdPosts(), requestContentP, multipartBodyAvt).enqueue(new Callback<Comment>() {
+//                                    @Override
+//                                    public void onResponse(Call<Comment> call, retrofit2.Response<Comment> response) {
+//                                        Toast.makeText(getContext(), "cmt succes", Toast.LENGTH_SHORT).show();
+//                                        List<Comment> list = getListCmtOfPosts(posts1);
+//                                    }
+//                                    public List<Comment> getListCmtOfPosts(Posts1 posts1) {
+//                                        List<Comment> listCmt = new ArrayList<>();
+//                                        RequestQueue queue = Volley.newRequestQueue(getContext());
+//                                        StringRequest stringRequest = new StringRequest(Request.Method.GET, url + "comment/posts/" + posts1.getIdPosts(), new Response.Listener<String>() {
+//                                            @Override
+//                                            public void onResponse(String response) {
+//                                                resultCmt = response;
+//                                                try {
+//                                                    JSONArray jsonArray = new JSONArray(resultCmt);
+//                                                    int s = jsonArray.length();
+//                                                    for (int i = 0; i < s; i++) {
+//                                                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+//                                                        int id = jsonObject.getInt("idCmt");
+//                                                        String content = jsonObject.getString("content");
+//                                                        String linkImgCmt = jsonObject.getString("linkImgCmt");
+//                                                        String timeCmt = jsonObject.getString("timeCmt");
+//                                                        String updateAt = jsonObject.getString("updateAt");
+//                                                        JSONObject accountCmt = jsonObject.getJSONObject("account");
+//                                                        Friend friend = convertOBToAccount(accountCmt);
+//
+//                                                        Comment comment = new Comment(id, content, linkImgCmt, timeCmt, updateAt, null, friend, posts1, null);
+//                                                        listCmt.add(comment);
+//                                                    }
+//                                                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+//                                                    CommentAdapter commentAdapter = new CommentAdapter(listCmt, getContext());
+//                                                    revComment.setLayoutManager(linearLayoutManager);
+//                                                    revComment.setAdapter(commentAdapter);
+//
+//
+//                                                } catch (JSONException e) {
+//                                                    e.printStackTrace();
+//                                                    System.out.println("lỗi tạo list comment");
+//                                                }
+//                                            }
+//
+//                                            private Friend convertOBToAccount(JSONObject accountCmt) {
+//                                                Friend friend = null;
+//                                                try {
+//                                                    String id = accountCmt.getString("id");
+//                                                    String username = accountCmt.getString("username");
+//                                                    String role = accountCmt.getString("role");
+//                                                    String fullname = accountCmt.getString("fullname");
+//                                                    String gender = accountCmt.getString("gender");
+//                                                    boolean status = accountCmt.getBoolean("status");
+//                                                    String linkAvt = accountCmt.getString("linkAvt");
+//                                                    String email = accountCmt.getString("email");
+//                                                    String creaetAt = accountCmt.getString("creaetAt");
+//                                                    String updateAt = accountCmt.getString("updateAt");
+//                                                    friend = new Friend(id, username, role, fullname, gender, status, linkAvt, email, creaetAt, updateAt);
+//                                                    return friend;
+//                                                } catch (JSONException e) {
+//                                                    e.printStackTrace();
+//                                                    System.out.println("lỗi convert account comment");
+//                                                }
+//                                                return friend;
+//                                            }
+//                                        }, new Response.ErrorListener() {
+//                                            @Override
+//                                            public void onErrorResponse(VolleyError error) {
+//                                                Toast.makeText(getContext(), "get all comment fail", Toast.LENGTH_SHORT).show();
+//                                            }
+//                                        });
+//                                        queue.add(stringRequest);
+//                                        return listCmt;
+//                                    }
+//
+//
+//
+//
+//                                    @Override
+//                                    public void onFailure(Call<Comment> call, Throwable t) {
+//                                        Toast.makeText(getContext(), "cmt fails", Toast.LENGTH_SHORT).show();
+//                                    }
+//                                });
+//                                realPath=null;
                             }else {
                                 RequestBody requestContentP = RequestBody.create(MediaType.parse("multipart/form-data"), cont);
                                 APIService.apiService.createCmt_Posts_No_Image(idAccLogining, posts1.getIdPosts(), requestContentP).enqueue(new Callback<Comment>() {
