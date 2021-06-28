@@ -23,6 +23,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 
+import com.example.eathit.R;
 import com.example.eathit.activities.InviteActivity;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -50,17 +51,19 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         v.vibrate(pattern, -1);
 
 
-        int resourceImage = getResources().getIdentifier(remoteMessage.getNotification().getIcon(), "drawable", getPackageName());
+        int resourceImage = getResources().getIdentifier(remoteMessage.getNotification().getIcon(), "mipmap", getPackageName());
 
 
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "CHANNEL_ID");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder.setSmallIcon(R.mipmap.ic_logo_round);
 //            builder.setSmallIcon(R.drawable.icontrans);
-            builder.setSmallIcon(resourceImage);
+//            builder.setSmallIcon(resourceImage);
         } else {
+            builder.setSmallIcon(R.mipmap.ic_logo_round);
 //            builder.setSmallIcon(R.drawable.icon_kritikar);
-            builder.setSmallIcon(resourceImage);
+//            builder.setSmallIcon(resourceImage);
         }
 
 

@@ -19,6 +19,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.eathit.R;
 import com.example.eathit.adapter.PersonAdapter;
+import com.example.eathit.adapter.iOnClickPersonInvite;
 import com.example.eathit.modules.Person;
 import com.example.eathit.notification.FcmNotificationsSender;
 import com.google.firebase.auth.FirebaseAuth;
@@ -56,11 +57,54 @@ public class InviteActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         String nameOfMe = user.getDisplayName();
-        callPeopleToInvite();
-   //     Toast.makeText(InviteActivity.this,"Tên: "+  nameOfMe, Toast.LENGTH_SHORT).show();
+        //callPeopleToInvite();
+
+
+        recyclerView = findViewById(R.id.recyclerViewInvitePeople);
+        list = new ArrayList<>();
+        personAdapter = new PersonAdapter(list, InviteActivity.this);
+
+        RequestQueue requestQueue = Volley.newRequestQueue(InviteActivity.this);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                String listBook = response;
+
+                try {
+                    JSONArray jsonArray = new JSONArray(listBook);
+                    for(int i = 0; i < jsonArray.length(); i++){
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        String FullName = jsonObject.getString("fullname");
+                        String LinkAvatar = jsonObject.getString("linkAvt");
+                        list.add(new Person(FullName, LinkAvatar));
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(InviteActivity.this, RecyclerView.VERTICAL, false);
+                        recyclerView.setLayoutManager(linearLayoutManager);
+                        recyclerView.setAdapter(personAdapter);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(InviteActivity.this, "Cập nhật dữ liệu thành công", Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(InviteActivity.this, "Lỗi cập nhật dữ liệu", Toast.LENGTH_LONG).show();
+            }
+        });
+        requestQueue.add(stringRequest);
+        personAdapter.setClickPersonInvite(new iOnClickPersonInvite() {
+            @Override
+            public void iClick(Person person) {
+                Toast.makeText(InviteActivity.this, "Bạn đang chọn " + person.getFullName() + " ", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
+
+
         FirebaseMessaging.getInstance().subscribeToTopic("all");
-//        String tittleNotification = nameOfMe + "bạn ơiii";
-//        String messageNotification = "Huân muốn mời bạn đi ăn " + getFoodToInvite() + " ngon lắm nha";
         btnSendInvitation = findViewById(R.id.buttonSendInvitation);
         btnSendInvitation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +116,6 @@ public class InviteActivity extends AppCompatActivity {
                     Toast.makeText(InviteActivity.this, "Successfully", Toast.LENGTH_SHORT).show();
             }
         });
-
 
 
     }
@@ -131,6 +174,7 @@ public class InviteActivity extends AppCompatActivity {
         messageInvite.add("Làm tí " + food + " không tình yêu ơiiiii");
         messageInvite.add("Có thực mới vực được đạo, " + food + " là sự lựa chọn không tồi chứ? Đi thôi");
         messageInvite.add("Đang đói, muốn chén " + food + " nên nhắn bạn đấy thần tài ạ, đi luôn thôi nào");
+        messageInvite.add("It can be a bug but I LOVE YOU, would you like some " + food);
         Random rand = new Random();
         int randomNum = rand.nextInt((messageInvite.size() - 0) + 1) + 0;
         return messageInvite.get(randomNum);

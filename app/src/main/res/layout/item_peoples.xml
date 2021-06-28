@@ -1,23 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-
+    android:id="@+id/itemPeopleClick"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <RelativeLayout
+
         android:layout_margin="2dp"
         android:background="@drawable/rectangle_4"
         android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <RelativeLayout
-            android:background="@drawable/people_bg"
+            android:background="@drawable/round_image"
             android:layout_width="50dp"
             android:layout_height="50dp">
             <ImageView
+
                 android:id="@+id/avatar_people"
-                android:src="@drawable/decor2"
+                android:src="@drawable/round_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </RelativeLayout>

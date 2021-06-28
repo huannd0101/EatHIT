@@ -31,7 +31,7 @@ import java.util.Objects;
 import java.util.Random;
 
 public class RandomActivity extends AppCompatActivity {
-    private static final String url = "https://btl-spring-boot.herokuapp.com/api/food/2";
+    private static final String url = "https://btl-spring-boot.herokuapp.com/api/food/";
     private static RecyclerView recyclerView;
     private static FoodAdapter foodAdapter;
     private static List<Food> list = new ArrayList<>();
@@ -51,7 +51,10 @@ public class RandomActivity extends AppCompatActivity {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                String listBook = response;
+                btnRandom.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String listBook = response;
                         try {
                             JSONArray jsonArray = new JSONArray(listBook);
                             for(int i = 0; i < jsonArray.length(); i++){
@@ -67,10 +70,13 @@ public class RandomActivity extends AppCompatActivity {
                             Random rand = new Random();
                             int randomNum = rand.nextInt((list.size() - 0) + 1) + 0;
                             listRandom.add(new Food(list.get(randomNum).getNameFood(), list.get(randomNum).getPriceFood()));
-                            
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                    }
+                });
+
 
                 Toast.makeText(RandomActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
             }
