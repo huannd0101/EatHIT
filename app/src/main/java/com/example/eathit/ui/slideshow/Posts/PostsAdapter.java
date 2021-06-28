@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,10 +40,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
+    private static final int SELECT_PICTURE = 1;
     List<Posts1> listPosts;
     Context context;
     String url = "https://btl-spring-boot.herokuapp.com/api/";
@@ -55,6 +59,17 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
 
     RecyclerView revComment;
+
+    IOnClickPosts iOnClickPosts;
+
+
+    public IOnClickPosts getiOnClickPosts() {
+        return iOnClickPosts;
+    }
+
+    public void setiOnClickPosts(IOnClickPosts iOnClickPosts) {
+        this.iOnClickPosts = iOnClickPosts;
+    }
 
     public PostsAdapter(List<Posts1> listPosts, Context context) {
         this.listPosts = listPosts;
@@ -97,12 +112,10 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         holder.img_status.bringToFront();
         Friend friend1 = listPosts.get(position).getAccount();
 
-        if (friend1.getLinkAvt() != "null") {
+        if (friend1.getLinkAvt().trim() != "null") {
             Glide.with(context).load(friend1.getLinkAvt()).into(holder.img_avt);
-        } else {
-            holder.img_avt.setImageResource(R.drawable.ic_baseline_person_24);
-            holder.img_avt.setColorFilter(context.getResources().getColor(R.color.origin));
         }
+
 
         holder.tv_fullname.setText(friend1.getFullname());
 //cần format
@@ -129,7 +142,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         if (listPosts.get(position).getImgLink() != "null") {
             holder.img_posts.setVisibility(View.VISIBLE);
             Glide.with(context).load(listPosts.get(position).getImgLink()).into(holder.img_posts);
-        }else {
+        } else {
             holder.img_posts.setVisibility(View.GONE);
         }
 
@@ -145,8 +158,32 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         }
 
 
-        int countCmt= countComment(listPosts.get(position).getIdPosts());
-        holder.tv_so_binh_luan.setText(countCmt + " Bình luận");
+//        holder.tv_so_binh_luan.setText(getNumberOfCmt(listPosts.get(position).getIdPosts()) + " Bình luận");
+        holder.see_cmt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.show_bl.setVisibility(View.VISIBLE);
+                int idPP= listPosts.get(position).getIdPosts();
+
+                RequestQueue requestQueue= Volley.newRequestQueue(getContext());
+                StringRequest stringRequest= new StringRequest(Request.Method.GET, url + "comment/posts/" + idPP + "/count", new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        holder.show_bl.setVisibility(View.GONE);
+                        holder.see_cmt.setVisibility(View.GONE);
+                        holder.tv_so_binh_luan.setText(response+  " bình luận");
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("cm", "onErrorResponse: đéo call đc số lượng comment");
+                        holder.tv_so_binh_luan.setText("(error)"+" bình luận");
+                    }
+                });
+                requestQueue.add(stringRequest);
+
+            }
+        });
 
         //like
         holder.click_to_like.setOnClickListener(new View.OnClickListener() {
@@ -236,12 +273,13 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 ImageView img_choose_img_to_cmt = dialog.findViewById(R.id.img_choose_img_to_cmt);
                 ImageView img_btn_send_cmt = dialog.findViewById(R.id.img_btn_send_cmt);
                 EditText edt_type_cmt = dialog.findViewById(R.id.edt_type_to_cmt);
+                ImageView img_selected= dialog.findViewById(R.id.img_cmt_selected);
 
 
                 dialog.show();
-               //comment
-                List<Comment> l= getListCmtOfPosts(listPosts.get(position));
-                Toast.makeText(context, "list cmt: "+ l.toString(), Toast.LENGTH_SHORT).show();
+                //comment
+                List<Comment> l = getListCmtOfPosts(listPosts.get(position));
+                Toast.makeText(context, "list cmt: " + l.toString(), Toast.LENGTH_SHORT).show();
 
                 //comment
 
@@ -249,20 +287,31 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 img_choose_img_to_cmt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "chọn ảnh", Toast.LENGTH_SHORT).show();
+                        //chose image
+                        Toast.makeText(getContext(), "choose image", Toast.LENGTH_SHORT).show();
+                        try {
+                            iOnClickPosts.IOnClickImage(listPosts.get(position));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
                 img_btn_send_cmt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "gửi comment: " + edt_type_cmt.getText().toString(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(context, "gửi comment: " + edt_type_cmt.getText().toString(), Toast.LENGTH_SHORT).show();
+                        iOnClickPosts.IOnClickSent(listPosts.get(position), edt_type_cmt.getText().toString().trim(), revComment);
+                        List<Comment> l1= getListCmtOfPosts(listPosts.get(position));
+                        edt_type_cmt.setText("");
+                        Toast.makeText(getContext(), ""+ l1.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
 
 //                Toast.makeText(context, "cmt", Toast.LENGTH_SHORT).show();
             }
-            public List<Comment> getListCmtOfPosts(Posts1 posts1){
-                List<Comment> listCmt= new ArrayList<>();
+
+            public List<Comment> getListCmtOfPosts(Posts1 posts1) {
+                List<Comment> listCmt = new ArrayList<>();
                 RequestQueue queue = Volley.newRequestQueue(getContext());
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url + "comment/posts/" + posts1.getIdPosts(), new Response.Listener<String>() {
                     @Override
@@ -284,8 +333,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                                 Comment comment = new Comment(id, content, linkImgCmt, timeCmt, updateAt, null, friend, posts1, null);
                                 listCmt.add(comment);
                             }
-                            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
-                            CommentAdapter commentAdapter = new CommentAdapter(listCmt, context);
+                            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+                            CommentAdapter commentAdapter = new CommentAdapter(listCmt, getContext());
                             revComment.setLayoutManager(linearLayoutManager);
                             revComment.setAdapter(commentAdapter);
 
@@ -308,12 +357,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
         });
 
-
-
-    }
-
-    private int countComment(int idPosts) {
-        return 90;
     }
 
 
@@ -321,9 +364,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     public int getItemCount() {
         return listPosts.size();
     }
-
-
-
 
 
     public Friend convertOBToAccount(JSONObject accountCmt) {
@@ -352,7 +392,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         ImageView img_avt, img_status, img_posts, img_like_click;
         TextView tv_fullname, tv_createAt, tv_content, tv_so_like, tv_so_binh_luan, tv_like_click, tv_see_more;
         LinearLayout click_to_like, click_to_cmt;
-
+        ProgressBar show_bl;
+        ImageView see_cmt;
 
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
@@ -373,7 +414,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
             tv_see_more = itemView.findViewById(R.id.tv_see_more);
 
-
+            show_bl = itemView.findViewById(R.id.show_bl);
+            see_cmt= itemView.findViewById(R.id.see_cmt);
         }
     }
+
+
+
 }

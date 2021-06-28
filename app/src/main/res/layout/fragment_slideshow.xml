@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
     tools:context=".ui.slideshow.SlideshowFragment">
 
     <LinearLayout
@@ -77,6 +76,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/revPosts"
         android:layout_width="match_parent"
+        android:background="@color/background_color"
         android:layout_height="match_parent"
         android:layoutAnimation="@anim/layout_left_to_right"
         android:layout_below="@id/lstt"
