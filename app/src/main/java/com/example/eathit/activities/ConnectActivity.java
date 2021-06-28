@@ -1,10 +1,12 @@
 package com.example.eathit.activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -77,6 +79,9 @@ public class ConnectActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        ConfirmedConnect(listConnect.get(0).getFullName(), 0);
+
+
                     }
                 });
                 Toast.makeText(ConnectActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
@@ -95,5 +100,36 @@ public class ConnectActivity extends AppCompatActivity {
 //            }
 //        }
         requestQueue.add(stringRequest);
+    }
+    private void ConfirmedConnect(String name, int num)
+    {
+        if(num == 0)
+        {
+            AlertDialog.Builder alerDialoog = new AlertDialog.Builder(this);
+            alerDialoog.setTitle("Connect Successfully");
+            alerDialoog.setMessage("You connected with " + name);
+            alerDialoog.setIcon(R.mipmap.ic_logo_round);
+            alerDialoog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            alerDialoog.show();
+        }else
+        {
+            AlertDialog.Builder alerDialoog = new AlertDialog.Builder(this);
+            alerDialoog.setTitle("Connect Failed");
+            alerDialoog.setMessage("ID you enter is invalid, please try again");
+            alerDialoog.setIcon(R.mipmap.ic_logo_round);
+            alerDialoog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            alerDialoog.show();
+        }
+
     }
 }

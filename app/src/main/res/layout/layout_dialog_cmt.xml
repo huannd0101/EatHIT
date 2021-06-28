@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:layout_above="@id/loType"
         android:layout_margin="5dp"
-        android:background="@drawable/bg_rev_cmt"
+        android:background="@color/background_color"
         android:layoutAnimation="@anim/layout_left_to_right"
         android:padding="5dp" />
 
