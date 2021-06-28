@@ -3,7 +3,7 @@ package com.example.eathit.modules;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Person {
+public class Person implements Parcelable{
     private String id, userName, role, fullName, gender, linkAvatar, email, createAt, updateAt;
     private Boolean status;
 
@@ -38,6 +38,32 @@ public class Person {
 //            return new Person[size];
 //        }
 //    };
+
+    protected Person(Parcel in) {
+        id = in.readString();
+        userName = in.readString();
+        role = in.readString();
+        fullName = in.readString();
+        gender = in.readString();
+        linkAvatar = in.readString();
+        email = in.readString();
+        createAt = in.readString();
+        updateAt = in.readString();
+        byte tmpStatus = in.readByte();
+        status = tmpStatus == 0 ? null : tmpStatus == 1;
+    }
+
+    public static final Creator<Person> CREATOR = new Creator<Person>() {
+        @Override
+        public Person createFromParcel(Parcel in) {
+            return new Person(in);
+        }
+
+        @Override
+        public Person[] newArray(int size) {
+            return new Person[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -135,14 +161,25 @@ public class Person {
                 '}';
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
-//    @Override
-//    public int describeContents() {
-//        return 0;
-//    }
-//
-//    @Override
-//    public void writeToParcel(Parcel dest, int flags) {
-//
-//    }
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(userName);
+        dest.writeString(role);
+        dest.writeString(fullName);
+        dest.writeString(gender);
+        dest.writeString(linkAvatar);
+        dest.writeString(email);
+        dest.writeString(createAt);
+        dest.writeString(updateAt);
+        dest.writeByte((byte) (status == null ? 0 : status ? 1 : 2));
+    }
+
+
+
 }

@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,7 +25,11 @@ import java.util.List;
 public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder> {
     List<Person> list;
     Context context;
-
+    iOnClickPersonInvite clickPersonInvite;
+    public void setClickPersonInvite(iOnClickPersonInvite iOnClickPersonInvite)
+    {
+        this.clickPersonInvite = iOnClickPersonInvite;
+    }
     public PersonAdapter(List<Person> list, Context context) {
         this.list = list;
         this.context = context;
@@ -43,6 +49,24 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
         String s = list.get(position).getFullName();
         holder.textViewFullNamePerSon.setText(s);
         Glide.with(context).load(list.get(position).getLinkAvatar()).into(holder.imageViewAvatarPerson);
+        holder.itemPersonClick.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickPersonInvite.iClick(list.get(position));
+            }
+        });
+        holder.imageViewAvatarPerson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickPersonInvite.iClick(list.get(position));
+            }
+        });
+        holder.textViewFullNamePerSon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickPersonInvite.iClick(list.get(position));
+            }
+        });
     }
 
     @Override
@@ -53,10 +77,12 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewAvatarPerson;
         TextView textViewFullNamePerSon;
+        LinearLayout itemPersonClick;
         public ViewHolder(@NonNull @NotNull View itemView) {
             super(itemView);
             imageViewAvatarPerson = itemView.findViewById(R.id.avatar_people);
             textViewFullNamePerSon = itemView.findViewById(R.id.full_name_people);
+            itemPersonClick = itemView.findViewById(R.id.itemPeopleClick);
         }
     }
 
