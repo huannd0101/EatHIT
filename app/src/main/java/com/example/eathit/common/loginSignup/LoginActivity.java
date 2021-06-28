@@ -56,6 +56,9 @@ import java.util.Objects;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class LoginActivity extends AppCompatActivity {
     ActivityLoginBinding binding;
     ProgressDialog progressDialog;
@@ -75,41 +78,6 @@ public class LoginActivity extends AppCompatActivity {
         //animation
         initAnimate();
 
-
-
-
-        //btn signIn of chatApp
-//        binding.btnSignIn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //xử lý dữ liệu đầu vào
-//                if (binding.tiedtUser.getText().toString().isEmpty()) {
-//                    binding.tiedtUser.setError("Enter your email");
-//                    return;
-//                }
-//
-//                if (binding.tiedtPass.getText().toString().isEmpty()) {
-//                    binding.tiedtPass.setError("Enter your password");
-//                    return;
-//                }
-//
-//                //bật dialog
-//                progressDialog.show();
-//
-//                auth.signInWithEmailAndPassword(binding.tiedtUser.getText().toString(), binding.tiedtPass.getText().toString())
-//                        .addOnCompleteListener(task -> {
-//                            //tắt dialog
-//                            progressDialog.dismiss();
-//
-//                            if (task.isSuccessful()) {
-//                                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-//                                startActivity(intent);
-//                            } else {
-//                                Toast.makeText(SignInActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
-//            }
-//        });
 
 
 
@@ -372,18 +340,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-
-
-
-    
-//    tesst
-
-
-
-
-
-
-
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         auth.signInWithCredential(credential)
@@ -392,16 +348,71 @@ public class LoginActivity extends AppCompatActivity {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("TAG", "signInWithCredential:success");
                         FirebaseUser user = auth.getCurrentUser();
-
-                        //lưu vào database
-                        User users = new User();
-                        if(user != null){
-                            users.setUserId(user.getUid());
-                            users.setFullName(user.getDisplayName());
-                            users.setProfilePic(Objects.requireNonNull(user.getPhotoUrl()).toString());
-                            database.getReference().child("Users").child(user.getUid()).setValue(users);
+                        if(user == null){
+                            Log.d("TAG",  "nulllll");
+                        }else {
+                            Log.d("TAG", user.getDisplayName() + "");
                         }
+                        //lưu vào database
+//                        User users = new User();
+//                        if(user != null){
+//                            users.setUserId(user.getUid());
+//                            users.setFullName(user.getDisplayName());
+//                            users.setProfilePic(Objects.requireNonNull(user.getPhotoUrl()).toString());
+//                            database.getReference().child("Users").child(user.getUid()).setValue(users);
+//                        }
                         //kết thúc lưu vào database
+
+
+                        //lưu vào api
+                        if(user != null){
+                            JSONObject jsonObject = new JSONObject();
+                            try {
+                                jsonObject.put("username", user.getEmail());
+                                jsonObject.put("password", "");
+                                jsonObject.put("role", "");
+                                jsonObject.put("fullname", user.getDisplayName());
+                                jsonObject.put("linkAvt", Objects.requireNonNull(user.getPhotoUrl()).toString());
+                                jsonObject.put("idNew", user.getUid());
+                                jsonObject.put("email", user.getEmail());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                            String stringBody = jsonObject.toString();
+                            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                            StringRequest request = new StringRequest(Request.Method.POST,
+                                    "https://btl-spring-boot.herokuapp.com/api/accounts/create",
+                                    new Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+
+                                        }
+                                    }){
+                                @Override
+                                public String getBodyContentType() {
+                                    return "application/json; charset = utf-8";
+                                }
+
+                                @Override
+                                public byte[] getBody() throws AuthFailureError {
+                                    try {
+                                        return stringBody.getBytes("utf-8");
+                                    } catch (UnsupportedEncodingException e) {
+                                        e.printStackTrace();
+                                        return null;
+                                    }
+                                }
+                            };
+                            queue.add(request);
+
+                        }
 
                         Intent intent = new Intent(LoginActivity.this, Main2Activity.class);
                         startActivity(intent);

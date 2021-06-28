@@ -2,16 +2,15 @@ package com.example.eathit.fragmentChat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,10 +29,7 @@ import com.example.eathit.utilities.Constants;
 import com.github.nkzawa.socketio.client.Socket;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -43,7 +39,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 import retrofit2.Call;
@@ -76,7 +71,6 @@ public class ChatsFragment extends Fragment {
             @Override
             public void onResponse(@NotNull Call<List<RoomChat>> call, @NotNull Response<List<RoomChat>> response) {
                 roomChats = response.body();
-                Toast.makeText(getContext(), "Đây là currentId: " + currentUser.getUid(), Toast.LENGTH_SHORT).show();
 
                 for(RoomChat roomChat : roomChats){
                     if(roomChat.getSender().equals(currentUser.getUid()) ||
@@ -147,6 +141,10 @@ public class ChatsFragment extends Fragment {
 
 
 
+        binding.btnHome.setOnClickListener(v -> {
+            startActivity(new Intent(getContext(), Main2Activity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+        });
+
 
 
         return binding.getRoot();
@@ -163,7 +161,6 @@ public class ChatsFragment extends Fragment {
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(getContext(), "đây là api\n"+ response, Toast.LENGTH_SHORT).show();
                         try {
                             JSONArray array = new JSONArray(response);
 
