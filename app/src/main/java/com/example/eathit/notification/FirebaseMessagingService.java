@@ -25,11 +25,17 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.example.eathit.R;
 import com.example.eathit.activities.InviteActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.RemoteMessage;
 
 public class FirebaseMessagingService extends com.google.firebase.messaging.FirebaseMessagingService {
 
-     NotificationManager mNotificationManager;
+    NotificationManager mNotificationManager;
+    FirebaseDatabase database;
+    FirebaseAuth auth;
+    FirebaseUser user;
 
 
     @Override
@@ -71,6 +77,10 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         Intent resultIntent = new Intent(this, InviteActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        database = FirebaseDatabase.getInstance();
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
 
         builder.setContentTitle(remoteMessage.getNotification().getTitle());
         builder.setContentText(remoteMessage.getNotification().getBody());
