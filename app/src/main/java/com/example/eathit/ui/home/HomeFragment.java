@@ -38,10 +38,7 @@ public class HomeFragment extends Fragment {
 
         Picasso.get().load(currentUser.getPhotoUrl()).placeholder(R.drawable.ic_baseline_person_24).into(binding.imgUser);
         binding.tvUserName.setText("Welcome " + currentUser.getDisplayName() + "!");
-//        binding.buttonMenuConnect.setOnClickListener(v -> {
-//            Intent intent = new Intent(getActivity(), ConnectActivity.class);
-//            startActivity(intent);
-//        });
+
         return binding.getRoot();
     }
 
