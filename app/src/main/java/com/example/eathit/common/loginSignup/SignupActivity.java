@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.eathit.R;
 import com.example.eathit.common.fragment.FirstSignupFragment;
-import com.example.eathit.common.fragment.ThirdSignupFragment;
 import com.example.eathit.databinding.ActivitySignupBinding;
 
 import java.util.ArrayList;

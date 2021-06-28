@@ -53,7 +53,7 @@
                 android:text="Welcome Nguyễn Đình Huân!"
                 android:textColor="@color/black"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="wrap_content"
