@@ -250,32 +250,28 @@ public class ChatsDetailActivity extends AppCompatActivity {
     private final Emitter.Listener serverSendMessageListener = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            runOnUiThread(new Runnable() {
-                @RequiresApi(api = Build.VERSION_CODES.O)
-                @Override
-                public void run() {
-                    System.out.println(args[0].toString());
-                    JSONObject jsonObject = (JSONObject) args[0];
-                    try {
-                        String message = (String) jsonObject.get("message");
+            runOnUiThread(() -> {
+                System.out.println(args[0].toString());
+                JSONObject jsonObject = (JSONObject) args[0];
+                try {
+                    String message = (String) jsonObject.get("message");
 
-                        messageList.add(
-                                new Message(
-                                        message,
-                                        (String) jsonObject.get("sender"),
-                                        (String) jsonObject.get("receiver"),
-                                        jsonObject.getInt("room")
-                                        ));
+                    messageList.add(
+                            new Message(
+                                    message,
+                                    (String) jsonObject.get("sender"),
+                                    (String) jsonObject.get("receiver"),
+                                    jsonObject.getInt("room")
+                                    ));
 
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    linearLayoutManager.setReverseLayout(false);
-                    linearLayoutManager.setSmoothScrollbarEnabled(true);
-                    linearLayoutManager.setStackFromEnd(true);
-                    adapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+                linearLayoutManager.setReverseLayout(false);
+                linearLayoutManager.setSmoothScrollbarEnabled(true);
+                linearLayoutManager.setStackFromEnd(true);
+                adapter.notifyDataSetChanged();
             });
         }
     };

@@ -6,7 +6,7 @@ public class Constants {
     //speak
     public static final int RESULT_SPEECH = 1;
     //chạy ngrok http 8081
-    public static final String URL_SOCKET_IO = "https://696da9ace964.ngrok.io";
+    public static final String URL_SOCKET_IO = "https://43783528be06.ngrok.io";
     public static final String CLIENT_LEAVE_ROOM = "client-leave-room";
     public static final String CLIENT_SEND_ROOM = "client-send-room";
     public static final String SERVER_SEND_MESSAGE = "server-send-message";

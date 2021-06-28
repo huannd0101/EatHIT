@@ -592,4 +592,6 @@ public class SlideshowFragment extends Fragment {
     }
 
 
+
+    
 }
