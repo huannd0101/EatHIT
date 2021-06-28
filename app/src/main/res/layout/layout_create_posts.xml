@@ -21,7 +21,7 @@
             app:cardCornerRadius="30dp">
 
             <ImageView
-                android:id="@+id/img_avt_lg"
+                android:id="@+id/img_avt_lg1"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:clipChildren="true"
@@ -73,8 +73,8 @@
         <ImageView
             android:id="@+id/img_choose_img_to_post"
             android:layout_marginLeft="20dp"
-            android:visibility="gone"
             android:src="@drawable/android2"
+            android:visibility="gone"
             android:layout_width="100dp"
             android:layout_height="100dp"
             />

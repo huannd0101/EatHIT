@@ -1,14 +1,12 @@
 package com.example.eathit.onBoardingScreen;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.eathit.R;
+import androidx.fragment.app.Fragment;
+
 import com.example.eathit.databinding.FragmentBlank1Binding;
 
 import org.jetbrains.annotations.NotNull;

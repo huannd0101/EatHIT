@@ -15,8 +15,8 @@
         android:orientation="horizontal">
 
         <FrameLayout
-            android:layout_width="60dp"
-            android:layout_height="60dp">
+            android:layout_width="65dp"
+            android:layout_height="65dp">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="60dp"
@@ -28,16 +28,18 @@
                     android:id="@+id/img_avt"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
+                    android:background="@drawable/bg_avt_circle"
+                    android:src="@drawable/ic_baseline_person_24"
                     android:clipChildren="true" />
 
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/img_status_on_off"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
                 android:layout_gravity="bottom|right"
-                app:cardCornerRadius="7.5dp">
+                app:cardCornerRadius="8.5dp">
 
                 <ImageView
                     android:id="@+id/img_status"
@@ -94,6 +96,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|right"
             android:paddingEnd="20dp"
+            android:textColor="@color/dis_Like"
             android:text="see more"
             android:textSize="15dp" />
 
@@ -130,14 +133,39 @@
                 android:text="100"
                 android:textSize="20dp" />
 
-            <TextView
-                android:id="@+id/tv_so_binhluan"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="right"
-                android:paddingStart="5dp"
-                android:text="33 bình luận"
-                android:textSize="20dp" />
+                android:layout_gravity="center_vertical">
+
+                <ProgressBar
+                    android:id="@+id/show_bl"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@id/see_cmt"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/see_cmt"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@id/tv_so_binhluan"
+                    android:src="@drawable/ic_baseline_remove_red_eye_24"
+                    app:tint="@color/com_facebook_blue" />
+
+
+                <TextView
+                    android:id="@+id/tv_so_binhluan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="right"
+                    android:paddingStart="5dp"
+                    android:text="bình luận"
+                    android:textSize="20dp" />
+            </RelativeLayout>
         </LinearLayout>
 
         <View
