@@ -56,6 +56,7 @@ public class Main2Activity extends AppCompatActivity implements TextToSpeech.OnI
     FirebaseAuth auth;
     FirebaseUser user;
 
+
     TextToSpeech textToSpeech;
 
 
@@ -72,7 +73,6 @@ public class Main2Activity extends AppCompatActivity implements TextToSpeech.OnI
         mSocket = socketApplication.getSocket();
 
         setSupportActionBar(binding.appBarMain2.toolbar);
-
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
